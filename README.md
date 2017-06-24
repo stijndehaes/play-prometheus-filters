@@ -1,16 +1,16 @@
-#Play prometheus play.prometheus.filters
+# Play prometheus play.prometheus.filters
 
 This play library provides three types of filters that collect prometheus metrics.
 
-##The filters
+## The filters
 
-####Request counter
+### Request counter
 This filter counts all the requests in your application and adds a label for the status
 
-####Latency filter
+### Latency filter
 This filter collects the latency of all requests
 
-####Route Action Method Latency Filter
+### Route Action Method Latency Filter
 This filter collects the latency for all requests and adds a label call RouteActionMethod.
 This action method is the method name of the method you provided your routes file.
 This filter makes it possible to measure the latency for all your routes.
@@ -23,7 +23,7 @@ GET         /metrics          play.prometheus.controllers.PrometheusController.g
 
 The RouteActionMethod for the above example would be getMetrics
 
-##How to enable the filters
+## How to enable the filters
 See the [documentation of play](https://www.playframework.com/documentation/2.5.x/ScalaHttpFilters#Using-filters)
 
 You should make a filters class:
@@ -46,7 +46,7 @@ And the enable this filter in the application.conf
 play.http.filters=com.example.MyFilters
 ```
 
-##Prometheus controller
+## Prometheus controller
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 
 ```
