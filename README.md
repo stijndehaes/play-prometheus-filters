@@ -1,6 +1,15 @@
-# Play prometheus play.prometheus.filters
+# Play prometheus filters
 
 This play library provides three types of filters that collect prometheus metrics.
+A simple hello world application using these filters can be found in the following repo:
+https://github.com/stijndehaes/play-prometheus-filters-example-app
+
+To use the library add the following to you build.sbt
+
+```scala
+libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.1.0"
+
+```
 
 ## The filters
 
@@ -54,3 +63,5 @@ GET         /metrics          play.prometheus.controllers.PrometheusController.g
 ```
 
 You should be able to immediately get the metrics
+
+## Example

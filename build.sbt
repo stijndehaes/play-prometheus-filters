@@ -18,25 +18,24 @@ lazy val root = (project in file("."))
     pomIncludeRepository := { _ => false },
     makePomConfiguration ~= { _.copy(configurations = Some(Seq(Compile, Runtime, Optional))) },
     pomExtra :=
-      <url>https://github.com/stijndehaes/playPrometheusFilters</url>
-        <licenses>
-          <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-            <distribution>repo</distribution>
-          </license>
-        </licenses>
-        <scm>
-          <url>git@github.com:stijndehaes/playPrometheusFilters.git</url>
-          <connection>scm:git:git@github.com:stijndehaes/playPrometheusFilters.git</connection>
-        </scm>
-        <developers>
-          <developer>
-            <id>stijndehaes</id>u
-            <name>Stijn De Haes</name>
-            <timezone>+</timezone>
-          </developer>
-        </developers>
+      <url>https://github.com/stijndehaes/play-prometheus-filters</url>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>http://www.opensource.org/licenses/mit-license.php</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+      <scm>
+        <url>git@github.com:stijndehaes/play-prometheus-filters.git</url>
+        <connection>scm:git:git@github.com:stijndehaes/play-prometheus-filters.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>stijndehaes</id>
+          <name>Stijn De Haes</name>
+        </developer>
+      </developers>
 
   )
 scalaVersion := "2.11.11"
