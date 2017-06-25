@@ -1,4 +1,4 @@
-package play.prometheus.filters
+package com.github.stijndehaes.playprometheusfilters.filters
 
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any

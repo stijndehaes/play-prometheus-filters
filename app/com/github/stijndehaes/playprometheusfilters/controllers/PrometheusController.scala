@@ -1,12 +1,12 @@
-package play.prometheus.controllers
+package com.github.stijndehaes.playprometheusfilters.controllers
 
 import akka.util.ByteString
+import com.github.stijndehaes.playprometheusfilters.utils.WriterAdapter
 import com.google.inject.Inject
 import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import play.api.http.HttpEntity
 import play.api.mvc._
-import play.prometheus.utils.WriterAdapter
 
 class PrometheusController @Inject()(registry: CollectorRegistry) extends Controller {
 

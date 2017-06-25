@@ -1,4 +1,4 @@
-package play.prometheus.utils
+package com.github.stijndehaes.playprometheusfilters.utils
 
 import java.io.Writer
 

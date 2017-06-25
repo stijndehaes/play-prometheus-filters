@@ -1,4 +1,4 @@
-package play.prometheus.filters
+package com.github.stijndehaes.playprometheusfilters.filters
 
 import javax.inject.Inject
 

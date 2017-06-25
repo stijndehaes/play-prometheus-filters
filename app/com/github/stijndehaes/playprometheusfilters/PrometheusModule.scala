@@ -1,4 +1,4 @@
-package play.prometheus
+package com.github.stijndehaes.playprometheusfilters
 
 import com.google.inject.AbstractModule
 import io.prometheus.client.CollectorRegistry

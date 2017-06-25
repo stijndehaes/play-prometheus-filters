@@ -1,4 +1,4 @@
-package play.prometheus.filters
+package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
 import com.google.inject.{Inject, Singleton}

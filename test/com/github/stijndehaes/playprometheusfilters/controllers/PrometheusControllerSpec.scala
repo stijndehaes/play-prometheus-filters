@@ -1,4 +1,4 @@
-package play.prometheus.controllers
+package com.github.stijndehaes.playprometheusfilters.controllers
 
 import java.util.Collections
 
