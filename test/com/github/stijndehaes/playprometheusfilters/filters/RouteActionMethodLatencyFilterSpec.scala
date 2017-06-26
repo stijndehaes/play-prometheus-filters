@@ -42,6 +42,23 @@ class RouteActionMethodLatencyFilterSpec extends WordSpec with MustMatchers with
       countSample.labelValues must have size 1
       countSample.labelValues.get(0) mustBe "test"
     }
+
+    "Measure the latency for an unmatched route" in {
+      val filter = new RouteActionMethodLatencyFilter(mock[CollectorRegistry])
+      val rh = FakeRequest()
+      val action = Action(NotFound("error"))
+
+      await(filter(action)(rh).run())
+
+      val metrics = filter.requestLatency.collect()
+      metrics must have size 1
+      val samples = metrics.get(0).samples
+      //this is the count sample
+      val countSample = samples.get(samples.size() - 2)
+      countSample.value mustBe 1.0
+      countSample.labelValues must have size 1
+      countSample.labelValues.get(0) mustBe RouteActionMethodLatencyFilter.unmatchedRoute
+    }
   }
 
 }
