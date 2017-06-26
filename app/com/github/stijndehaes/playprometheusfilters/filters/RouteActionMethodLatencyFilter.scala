@@ -19,11 +19,15 @@ class RouteActionMethodLatencyFilter @Inject()(registry: CollectorRegistry) (imp
 
   def apply(nextFilter: RequestHeader => Future[Result])
     (requestHeader: RequestHeader): Future[Result] = {
-    val requestTimer = requestLatency.labels(requestHeader.tags(Tags.RouteActionMethod)).startTimer
+    val requestTimer = requestLatency.labels(requestHeader.tags.getOrElse(Tags.RouteActionMethod, RouteActionMethodLatencyFilter.unmatchedRoute)).startTimer
     nextFilter(requestHeader).map { result =>
       requestTimer.observeDuration()
       result
     }
   }
 
+}
+
+object RouteActionMethodLatencyFilter {
+  val unmatchedRoute: String = "unmatchedRoute"
 }
