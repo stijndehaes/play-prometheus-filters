@@ -1,5 +1,7 @@
 # Play prometheus filters
 
+[![Build Status](https://travis-ci.org/stijndehaes/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/stijndehaes/play-prometheus-filters)
+
 This play library provides three types of filters that collect prometheus metrics.
 A simple hello world application using these filters can be found in the following repo:
 https://github.com/stijndehaes/play-prometheus-filters-example-app
