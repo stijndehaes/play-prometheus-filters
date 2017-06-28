@@ -3,3 +3,7 @@ scala:
    - 2.11.11
 jdk:
   - oraclejdk8
+script:
+  - sbt clean coverage test coverageReport
+after_success:
+  - sbt coveralls
