@@ -2,29 +2,42 @@
 
 [![Build Status](https://travis-ci.org/stijndehaes/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/stijndehaes/play-prometheus-filters)
 [![Coverage Status](https://coveralls.io/repos/github/stijndehaes/play-prometheus-filters/badge.svg?branch=master)](https://coveralls.io/github/stijndehaes/play-prometheus-filters?branch=master)
-This play library provides three types of filters that collect prometheus metrics.
+This play library provides four types of filters that collect prometheus metrics.
+
+Two of these filters are also compatible with the [lagom framework](https://github.com/lagom/lagom).
+
 A simple hello world application using these filters can be found in the following repo:
 https://github.com/stijndehaes/play-prometheus-filters-example-app
 
 To use the library add the following to you build.sbt
 
 ```scala
-libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.1.0"
+libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.2.0"
 
 ```
 
 ## The filters
 
 ### Request counter
-This filter counts all the requests in your application and adds a label for the status
+This filter counts all the requests in your application and adds a label for the status.
+This filter is compatible with the lagom framework.
 
 ### Latency filter
-This filter collects the latency of all requests
+This filter collects the latency of all requests.
+This filter is compatible with the lagom framework.
 
-### Route Action Method Latency Filter
-This filter collects the latency for all requests and adds a label call RouteActionMethod.
+### Route Latency Filter
+This filter collects the latency for all requests and adds a label called RouteActionMethod.
 This action method is the method name of the method you provided your routes file.
 This filter makes it possible to measure the latency for all your routes.
+This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
+
+### Status and Route Latency Filter
+This filter collects the latency for all requests, adds a label called RouteActionMethod and a label called status.
+This action method is the method name of the method you provided your routes file.
+This filter makes it possible to measure the latency for all your routes and the status of the response for this route.
+It thus combines all the above filters into one.
+This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
 
 Example:
 
