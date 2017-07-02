@@ -9,7 +9,7 @@ import play.api.routing.Router.Tags
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RouteActionMethodLatencyFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class RouteLatencyFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   private[filters] val requestLatency = Histogram.build
     .name("requests_latency_seconds")
@@ -19,7 +19,7 @@ class RouteActionMethodLatencyFilter @Inject()(registry: CollectorRegistry) (imp
 
   def apply(nextFilter: RequestHeader => Future[Result])
     (requestHeader: RequestHeader): Future[Result] = {
-    val requestTimer = requestLatency.labels(requestHeader.tags.getOrElse(Tags.RouteActionMethod, RouteActionMethodLatencyFilter.unmatchedRoute)).startTimer
+    val requestTimer = requestLatency.labels(requestHeader.tags.getOrElse(Tags.RouteActionMethod, RouteLatencyFilter.unmatchedRoute)).startTimer
     nextFilter(requestHeader).map { result =>
       requestTimer.observeDuration()
       result
@@ -28,6 +28,6 @@ class RouteActionMethodLatencyFilter @Inject()(registry: CollectorRegistry) (imp
 
 }
 
-object RouteActionMethodLatencyFilter {
+object RouteLatencyFilter {
   val unmatchedRoute: String = "unmatchedRoute"
 }
