@@ -1,14 +1,17 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
+import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.mvc.{Action, Results}
+import play.api.mvc.Results
+import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class StatusCounterFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite {
 
@@ -26,7 +29,7 @@ class StatusCounterFilterSpec extends WordSpec with MustMatchers with MockitoSug
     "Count the requests with status" in {
       val filter = new StatusCounterFilter(mock[CollectorRegistry])
       val rh = FakeRequest()
-      val action = Action(Ok("success"))
+      val action = new MockController(stubControllerComponents()).ok
 
       await(filter(action)(rh).run())
 

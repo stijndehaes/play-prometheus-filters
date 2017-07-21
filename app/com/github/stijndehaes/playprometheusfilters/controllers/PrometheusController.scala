@@ -8,7 +8,7 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import play.api.http.HttpEntity
 
-class PrometheusController @Inject()(registry: CollectorRegistry) extends InjectedController {
+class PrometheusController @Inject()(registry: CollectorRegistry, cc: ControllerComponents) extends AbstractController(cc) {
 
   def getMetrics = Action {
     val samples = new StringBuilder()

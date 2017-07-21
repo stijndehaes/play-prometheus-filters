@@ -1,16 +1,19 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
+import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.typedmap.TypedMap
-import play.api.mvc.{Action, Results}
+import play.api.mvc.Results
 import play.api.routing.{HandlerDef, Router}
+import play.api.test.Helpers.stubControllerComponents
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
 
@@ -30,7 +33,7 @@ class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with Mo
       val rh = FakeRequest().withAttrs( TypedMap(
         Router.Attrs.HandlerDef -> HandlerDef(null, null, null, "test", null, null ,null ,null ,null)
       ))
-      val action = Action(Ok("success"))
+      val action = new MockController(stubControllerComponents()).ok
 
       await(filter(action)(rh).run())
 
@@ -48,7 +51,7 @@ class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with Mo
     "Measure the latency for an unmatched route" in {
       val filter = new StatusAndRouteLatencyFilter(mock[CollectorRegistry])
       val rh = FakeRequest()
-      val action = Action(NotFound("error"))
+      val action = new MockController(stubControllerComponents()).error
 
       await(filter(action)(rh).run())
 
