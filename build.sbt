@@ -1,7 +1,7 @@
 name := "play-prometheus-filters"
 organization := "com.github.stijndehaes"
 
-version := "0.2.0"
+version := "0.3.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
@@ -38,14 +38,17 @@ lazy val root = (project in file("."))
       </developers>
 
   )
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.2"
+
+crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
 
 libraryDependencies ++= Seq(
+  guice,
   "io.prometheus"             % "simpleclient"          % "0.0.23",
   "io.prometheus"             % "simpleclient_servlet"  % "0.0.23"
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatestplus.play"    %% "scalatestplus-play"         % "2.0.0"     % Test,
+  "org.scalatestplus.play"    %% "scalatestplus-play"         % "3.0.0"     % Test,
   "org.mockito"               % "mockito-core"                % "2.7.22"    % Test
 )

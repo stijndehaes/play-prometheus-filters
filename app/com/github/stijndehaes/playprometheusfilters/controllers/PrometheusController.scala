@@ -2,13 +2,13 @@ package com.github.stijndehaes.playprometheusfilters.controllers
 
 import akka.util.ByteString
 import com.github.stijndehaes.playprometheusfilters.utils.WriterAdapter
-import com.google.inject.Inject
+import javax.inject._
+import play.api.mvc._
 import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.exporter.common.TextFormat
 import play.api.http.HttpEntity
-import play.api.mvc._
 
-class PrometheusController @Inject()(registry: CollectorRegistry) extends Controller {
+class PrometheusController @Inject()(registry: CollectorRegistry, cc: ControllerComponents) extends AbstractController(cc) {
 
   def getMetrics = Action {
     val samples = new StringBuilder()

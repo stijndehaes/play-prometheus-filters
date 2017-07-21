@@ -20,7 +20,7 @@ class PrometheusControllerSpec extends PlaySpec with Results with MockitoSugar {
       val metricsFamilySample = new MetricFamilySamples("test", Collector.Type.COUNTER, "help", Collections.emptyList())
       when(collectorRegistry.metricFamilySamples()).thenReturn(new java.util.Vector(Collections.singleton(metricsFamilySample)).elements)
 
-      val client = new PrometheusController(collectorRegistry)
+      val client = new PrometheusController(collectorRegistry, stubControllerComponents())
 
       val request = FakeRequest(GET, "/metrics")
 

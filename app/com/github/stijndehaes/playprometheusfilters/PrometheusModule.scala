@@ -1,11 +1,13 @@
 package com.github.stijndehaes.playprometheusfilters
 
-import com.google.inject.AbstractModule
+import play.api.inject.{Binding, Module}
+import play.api.{Configuration, Environment}
 import io.prometheus.client.CollectorRegistry
 
-class PrometheusModule extends AbstractModule {
+class PrometheusModule extends Module {
 
-  override def configure(): Unit = {
-    bind(classOf[CollectorRegistry]).toInstance(CollectorRegistry.defaultRegistry)
-  }
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =  Seq(
+    bind[CollectorRegistry].to(CollectorRegistry.defaultRegistry)
+  )
+
 }
