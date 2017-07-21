@@ -9,12 +9,24 @@ Two of these filters are also compatible with the [lagom framework](https://gith
 A simple hello world application using these filters can be found in the following repo:
 https://github.com/stijndehaes/play-prometheus-filters-example-app
 
-To use the library add the following to you build.sbt
+To use the library add the following to you build.sbt:
 
 ```scala
-libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.2.0"
+libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.3.0"
 
 ```
+This version only supports play 2.6.
+For more info on play version compatibility see the releases matrix.
+
+
+#Releases
+
+| Release     | Play version |
+| :---------- | :----------- |
+| 0.1.x       | 2.5.x        |
+| 0.2.x       | 2.5.x        |
+| 0.3.x       | 2.6.x        |
+
 
 ## The filters
 
