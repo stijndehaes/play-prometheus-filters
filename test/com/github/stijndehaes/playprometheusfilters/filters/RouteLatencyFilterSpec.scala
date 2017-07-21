@@ -6,9 +6,10 @@ import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.typedmap.TypedMap
 import play.api.mvc.{Action, _}
-import play.api.routing.Router.Tags
+import play.api.routing.{HandlerDef, Router}
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
 
 class RouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
@@ -26,7 +27,9 @@ class RouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSuga
   "Apply method" should {
     "Measure the latency" in {
       val filter = new RouteLatencyFilter(mock[CollectorRegistry])
-      val rh = FakeRequest().withTag(Tags.RouteActionMethod, "test")
+      val rh = FakeRequest().withAttrs( TypedMap(
+        Router.Attrs.HandlerDef -> HandlerDef(null, null, null, "test", null, null ,null ,null ,null)
+      ))
       val action = Action(Ok("success"))
 
       await(filter(action)(rh).run())

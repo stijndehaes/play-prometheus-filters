@@ -4,7 +4,7 @@ import akka.stream.Materializer
 import com.google.inject.Inject
 import io.prometheus.client.{Collector, CollectorRegistry, Histogram}
 import play.api.mvc.{Filter, RequestHeader, Result}
-import play.api.routing.Router.Tags
+import play.api.routing.Router
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -24,7 +24,10 @@ class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry) (implic
     nextFilter(requestHeader).map { result =>
       val endTime = System.nanoTime
       val requestTime = endTime - startTime / Collector.NANOSECONDS_PER_SECOND
-      val routeLabel = requestHeader.tags.getOrElse(Tags.RouteActionMethod, RouteLatencyFilter.unmatchedRoute)
+      val routeLabel = requestHeader.attrs
+        .get(Router.Attrs.HandlerDef)
+        .map(_.method)
+        .getOrElse(RouteLatencyFilter.unmatchedRoute)
       val statusLabel = result.header.status.toString
       requestLatency.labels(routeLabel, statusLabel).observe(requestTime)
       result

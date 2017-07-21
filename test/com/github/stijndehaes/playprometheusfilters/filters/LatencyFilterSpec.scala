@@ -1,13 +1,12 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import akka.stream.Materializer
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.libs.concurrent.Execution.Implicits._
+import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc._
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
 
@@ -15,8 +14,9 @@ class LatencyFilterSpec extends WordSpec with MustMatchers with MockitoSugar wit
 
   "Filter constructor" should {
     "Add a histogram to the prometheus registry" in {
+      implicit val mat = app.materializer
       val collectorRegistry = mock[CollectorRegistry]
-      new LatencyFilter(collectorRegistry)(mock[Materializer], defaultContext)
+      new LatencyFilter(collectorRegistry)
       verify(collectorRegistry).register(any())
     }
   }

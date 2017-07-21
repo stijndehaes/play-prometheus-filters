@@ -6,7 +6,7 @@ import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.mvc.{Action, Results}
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
 
