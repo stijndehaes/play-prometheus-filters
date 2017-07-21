@@ -1,7 +1,7 @@
 name := "play-prometheus-filters"
 organization := "com.github.stijndehaes"
 
-version := "0.3.0-SNAPSHOT"
+version := "0.3.0"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
