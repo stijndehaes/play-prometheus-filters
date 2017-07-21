@@ -1,7 +1,7 @@
 name := "play-prometheus-filters"
 organization := "com.github.stijndehaes"
 
-version := "0.2.0"
+version := "0.3.0-SNAPSHOT"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala)
@@ -38,7 +38,9 @@ lazy val root = (project in file("."))
       </developers>
 
   )
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.2"
+
+crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
 
 libraryDependencies ++= Seq(
   guice,
