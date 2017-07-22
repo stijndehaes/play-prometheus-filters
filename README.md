@@ -19,7 +19,7 @@ This version only supports play 2.6.
 For more info on play version compatibility see the releases matrix.
 
 
-#Releases
+## Releases
 
 | Release     | Play version |
 | :---------- | :----------- |
