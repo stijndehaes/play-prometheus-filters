@@ -6,8 +6,10 @@ import io.prometheus.client.CollectorRegistry
 
 class PrometheusModule extends Module {
 
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] =  Seq(
-    bind[CollectorRegistry].to(CollectorRegistry.defaultRegistry)
-  )
-
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
+    CollectorRegistry.defaultRegistry.clear()
+    Seq(
+      bind[CollectorRegistry].to(CollectorRegistry.defaultRegistry)
+    )
+  }
 }

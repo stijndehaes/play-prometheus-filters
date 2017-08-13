@@ -1,13 +1,14 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import io.prometheus.client.{Collector, CollectorRegistry, Histogram}
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.api.routing.Router
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   private[filters] val requestLatency = Histogram.build
