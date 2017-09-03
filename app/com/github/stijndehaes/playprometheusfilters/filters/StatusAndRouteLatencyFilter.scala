@@ -24,7 +24,7 @@ class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry) (implic
 
     nextFilter(requestHeader).map { result =>
       val endTime = System.nanoTime
-      val requestTime = endTime - startTime / Collector.NANOSECONDS_PER_SECOND
+      val requestTime = (endTime - startTime) / Collector.NANOSECONDS_PER_SECOND
       val routeLabel = requestHeader.tags.getOrElse(Tags.RouteActionMethod, RouteLatencyFilter.unmatchedRoute)
       val statusLabel = result.header.status.toString
       requestLatency.labels(routeLabel, statusLabel).observe(requestTime)
