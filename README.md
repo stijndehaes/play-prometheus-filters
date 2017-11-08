@@ -67,8 +67,8 @@ You should make a filters class:
 ```scala
 import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
-import play.prometheus.filters.LatencyFilter
-import play.prometheus.filters.StatusCounterFilter
+import com.github.stijndehaes.playprometheusfilters.filters.LatencyFilter
+import com.github.stijndehaes.playprometheusfilters.filters.StatusCounterFilter
 
 class MyFilters @Inject() (
   latencyFilter: LatencyFilter,
@@ -86,7 +86,7 @@ play.http.filters=com.example.MyFilters
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 
 ```
-GET         /metrics          play.prometheus.controllers.PrometheusController.getMetrics
+GET         /metrics          com.github.stijndehaes.playprometheusfilters.controllers.PrometheusController.getMetrics
 ```
 
 You should be able to immediately get the metrics

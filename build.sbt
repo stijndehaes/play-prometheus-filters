@@ -44,8 +44,8 @@ crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
 
 libraryDependencies ++= Seq(
   guice,
-  "io.prometheus"             % "simpleclient"          % "0.0.23",
-  "io.prometheus"             % "simpleclient_servlet"  % "0.0.23"
+  "io.prometheus"             % "simpleclient"          % "0.1.0",
+  "io.prometheus"             % "simpleclient_servlet"  % "0.1.0"
 )
 
 libraryDependencies ++= Seq(
