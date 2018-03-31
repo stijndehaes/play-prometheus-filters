@@ -9,12 +9,12 @@ import play.api.routing.Router
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class ControllerStatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   private[filters] val requestLatency = Histogram.build
     .name("requests_latency_seconds")
     .help("Request latency in seconds.")
-    .labelNames("RouteActionMethod", "Status")
+    .labelNames("RouteActionMethod", "Status", "Controller")
     .register(registry)
 
   def apply(nextFilter: RequestHeader => Future[Result])
@@ -28,15 +28,23 @@ class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry) (implic
       val routeLabel = requestHeader.attrs
         .get(Router.Attrs.HandlerDef)
         .map(_.method)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedRoute)
+        .getOrElse(ControllerStatusAndRouteLatencyFilter.unmatchedRoute)
       val statusLabel = result.header.status.toString
-      requestLatency.labels(routeLabel, statusLabel).observe(requestTime)
+      val controllerLabel = requestHeader.attrs
+        .get(Router.Attrs.HandlerDef)
+        .map(_.controller)
+        .getOrElse(ControllerStatusAndRouteLatencyFilter.unmatchedController)
+      requestLatency.labels(routeLabel, statusLabel, controllerLabel).observe(requestTime)
       result
     }
   }
 
 }
 
-object StatusAndRouteLatencyFilter {
+object ControllerStatusAndRouteLatencyFilter {
   val unmatchedRoute: String = "unmatchedRoute"
+  val unmatchedController: String = "unmatchedController"
 }
+
+
+
