@@ -31,7 +31,7 @@ class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with Mo
     "Measure the latency" in {
       val filter = new StatusAndRouteLatencyFilter(mock[CollectorRegistry])
       val rh = FakeRequest().withAttrs( TypedMap(
-        Router.Attrs.HandlerDef -> HandlerDef(null, null, null, "test", null, null ,null ,null ,null)
+        Router.Attrs.HandlerDef -> HandlerDef(null, null, "testController", "test", null, "GET", "/path", null ,null)
       ))
       val action = new MockController(stubControllerComponents()).ok
 
@@ -43,9 +43,12 @@ class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with Mo
       //this is the count sample
       val countSample = samples.get(samples.size() - 2)
       countSample.value mustBe 1.0
-      countSample.labelValues must have size 2
+      countSample.labelValues must have size 5
       countSample.labelValues.get(0) mustBe "test"
       countSample.labelValues.get(1) mustBe "200"
+      countSample.labelValues.get(2) mustBe "testController"
+      countSample.labelValues.get(3) mustBe "/path"
+      countSample.labelValues.get(4) mustBe "GET"
     }
 
     "Measure the latency for an unmatched route" in {
@@ -61,9 +64,12 @@ class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with Mo
       //this is the count sample
       val countSample = samples.get(samples.size() - 2)
       countSample.value mustBe 1.0
-      countSample.labelValues must have size 2
+      countSample.labelValues must have size 5
       countSample.labelValues.get(0) mustBe StatusAndRouteLatencyFilter.unmatchedRoute
       countSample.labelValues.get(1) mustBe "404"
+      countSample.labelValues.get(2) mustBe StatusAndRouteLatencyFilter.unmatchedController
+      countSample.labelValues.get(3) mustBe StatusAndRouteLatencyFilter.unmatchedPath
+      countSample.labelValues.get(4) mustBe StatusAndRouteLatencyFilter.unmatchedVerb
     }
   }
 

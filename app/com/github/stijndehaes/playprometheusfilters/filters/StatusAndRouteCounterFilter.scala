@@ -2,54 +2,50 @@ package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
 import com.google.inject.{Inject, Singleton}
-import io.prometheus.client.{Collector, CollectorRegistry, Histogram}
+import io.prometheus.client.{CollectorRegistry, Counter}
 import play.api.mvc.{Filter, RequestHeader, Result}
 import play.api.routing.Router
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class StatusAndFullRouteLatencyFilter @Inject()(registry: CollectorRegistry)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class StatusAndRouteCounterFilter @Inject()(registry: CollectorRegistry)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
-  private[filters] val requestLatency = Histogram.build
-    .name("requests_latency_seconds")
-    .help("Request latency in seconds.")
-    .labelNames("RouteActionMethod", "Status", "Controller", "Path", "Verb")
+  private[filters] val requestCounter = Counter.build()
+    .name("http_requests_total")
+    .help("Total amount of requests")
+    .labelNames("method", "status", "controller", "path", "verb")
     .register(registry)
 
   def apply(nextFilter: RequestHeader => Future[Result])
     (requestHeader: RequestHeader): Future[Result] = {
 
-    val startTime = System.nanoTime
-
     nextFilter(requestHeader).map { result =>
-      val endTime = System.nanoTime
-      val requestTime = (endTime - startTime) / Collector.NANOSECONDS_PER_SECOND
-      val routeLabel = requestHeader.attrs
+      val methodLabel = requestHeader.attrs
         .get(Router.Attrs.HandlerDef)
         .map(_.method)
-        .getOrElse(StatusAndFullRouteLatencyFilter.unmatchedRoute)
+        .getOrElse(StatusAndRouteLatencyFilter.unmatchedRoute)
       val statusLabel = result.header.status.toString
       val controllerLabel = requestHeader.attrs
         .get(Router.Attrs.HandlerDef)
         .map(_.controller)
-        .getOrElse(StatusAndFullRouteLatencyFilter.unmatchedController)
+        .getOrElse(StatusAndRouteLatencyFilter.unmatchedController)
       val pathLabel = requestHeader.attrs
         .get(Router.Attrs.HandlerDef)
         .map(_.path)
-        .getOrElse(StatusAndFullRouteLatencyFilter.unmatchedPath)
+        .getOrElse(StatusAndRouteLatencyFilter.unmatchedPath)
       val verbLabel = requestHeader.attrs
         .get(Router.Attrs.HandlerDef)
         .map(_.verb)
-        .getOrElse(StatusAndFullRouteLatencyFilter.unmatchedVerb)
-      requestLatency.labels(routeLabel, statusLabel, controllerLabel, pathLabel, verbLabel).observe(requestTime)
+        .getOrElse(StatusAndRouteLatencyFilter.unmatchedVerb)
+      requestCounter.labels(methodLabel, statusLabel, controllerLabel, pathLabel, verbLabel).inc()
       result
     }
   }
 
 }
 
-object StatusAndFullRouteLatencyFilter {
+object StatusAndRouteCounterFilter {
   val unmatchedRoute: String = "unmatchedRoute"
   val unmatchedController: String = "unmatchedController"
   val unmatchedPath: String = "unmatchedPath"

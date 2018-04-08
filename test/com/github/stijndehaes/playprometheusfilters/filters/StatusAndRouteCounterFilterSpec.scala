@@ -15,21 +15,21 @@ import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class StatusAndFullRouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
+class StatusAndRouteCounterFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
 
   private implicit val mat = app.materializer
 
   "Filter constructor" should {
     "Add a histogram to the prometheus registry" in {
       val collectorRegistry = mock[CollectorRegistry]
-      new StatusAndFullRouteLatencyFilter(collectorRegistry)
+      new StatusAndRouteLatencyFilter(collectorRegistry)
       verify(collectorRegistry).register(any())
     }
   }
 
   "Apply method" should {
-    "Measure the latency" in {
-      val filter = new StatusAndFullRouteLatencyFilter(mock[CollectorRegistry])
+    "Measure the count" in {
+      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry])
       val rh = FakeRequest().withAttrs( TypedMap(
         Router.Attrs.HandlerDef -> HandlerDef(null, null, "testController", "test", null, "GET", "/path", null ,null)
       ))
@@ -37,11 +37,11 @@ class StatusAndFullRouteLatencyFilterSpec extends WordSpec with MustMatchers wit
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestLatency.collect()
+      val metrics = filter.requestCounter.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       //this is the count sample
-      val countSample = samples.get(samples.size() - 2)
+      val countSample = samples.get(0)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 5
       countSample.labelValues.get(0) mustBe "test"
@@ -51,25 +51,25 @@ class StatusAndFullRouteLatencyFilterSpec extends WordSpec with MustMatchers wit
       countSample.labelValues.get(4) mustBe "GET"
     }
 
-    "Measure the latency for an unmatched route" in {
-      val filter = new StatusAndFullRouteLatencyFilter(mock[CollectorRegistry])
+    "Measure the count for an unmatched route" in {
+      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry])
       val rh = FakeRequest()
       val action = new MockController(stubControllerComponents()).error
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestLatency.collect()
+      val metrics = filter.requestCounter.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       //this is the count sample
-      val countSample = samples.get(samples.size() - 2)
+      val countSample = samples.get(0)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 5
-      countSample.labelValues.get(0) mustBe StatusAndFullRouteLatencyFilter.unmatchedRoute
+      countSample.labelValues.get(0) mustBe StatusAndRouteCounterFilter.unmatchedRoute
       countSample.labelValues.get(1) mustBe "404"
-      countSample.labelValues.get(2) mustBe StatusAndFullRouteLatencyFilter.unmatchedController
-      countSample.labelValues.get(3) mustBe StatusAndFullRouteLatencyFilter.unmatchedPath
-      countSample.labelValues.get(4) mustBe StatusAndFullRouteLatencyFilter.unmatchedVerb
+      countSample.labelValues.get(2) mustBe StatusAndRouteCounterFilter.unmatchedController
+      countSample.labelValues.get(3) mustBe StatusAndRouteCounterFilter.unmatchedPath
+      countSample.labelValues.get(4) mustBe StatusAndRouteCounterFilter.unmatchedVerb
     }
   }
 
