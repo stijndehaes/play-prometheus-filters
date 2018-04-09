@@ -45,11 +45,29 @@ This filter makes it possible to measure the latency for all your routes.
 This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
 
 ### Status and Route Latency Filter
-This filter collects the latency for all requests, adds a label called RouteActionMethod and a label called status.
-This action method is the method name of the method you provided your routes file.
+This filter collects the latency for all requests, adds the following labels:
+* RouteActionMethod - Function method name in the controller for the request
+* Status - Response code of request
+* Controller - Controller that serviced the request
+* Path - Path of request
+* Verb - Verb of request (GET, PUT, etc.)
 This filter makes it possible to measure the latency for all your routes and the status of the response for this route.
 It thus combines all the above filters into one.
 This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
+
+### Status and Route Counter Filter
+This filter collects the counts of all requests, adds the following labels:
+* method - Function method name in the controller for the request
+* status - Response code of request
+* controller - Controller that serviced the request
+* path - Path of request
+* verb - Verb of request (GET, PUT, etc.)
+This filter makes it possible to measure the counts for all your routes and the status of the response for this route.
+It thus combines all the above filters into one.
+This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
+
+### Status and Route Counter Filter
+Combines the StatusAndRoute Latency and Count filters.
 
 Example:
 
