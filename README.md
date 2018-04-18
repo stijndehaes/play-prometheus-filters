@@ -26,6 +26,7 @@ For more info on play version compatibility see the releases matrix.
 | 0.1.x       | 2.5.x        |
 | 0.2.x       | 2.5.x        |
 | 0.3.x       | 2.6.x        |
+| 0.4.x       | 2.6.x        |
 
 
 ## The filters
