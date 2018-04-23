@@ -67,7 +67,7 @@ This filter makes it possible to measure the counts for all your routes and the 
 It thus combines all the above filters into one.
 This filter is not compatible with the lagom framework, since it does not provide the RouteActionMethod.
 
-### Status and Route Counter Filter
+### Status and Route Latency and Counter Filter
 Combines the StatusAndRoute Latency and Count filters.
 
 Example:
