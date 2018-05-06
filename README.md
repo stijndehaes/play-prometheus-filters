@@ -12,7 +12,7 @@ https://github.com/stijndehaes/play-prometheus-filters-example-app
 To use the library add the following to you build.sbt:
 
 ```scala
-libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.3.0"
+libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.4.0"
 
 ```
 This version only supports play 2.6.
