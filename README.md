@@ -79,7 +79,7 @@ GET         /metrics          play.prometheus.controllers.PrometheusController.g
 The RouteActionMethod for the above example would be getMetrics
 
 ## How to enable the filters
-See the [documentation of play](https://www.playframework.com/documentation/2.6.x/ScalaHttpFilters#Using-filters))
+See the [documentation of play](https://www.playframework.com/documentation/2.6.x/ScalaHttpFilters#Using-filters)
 
 You should make a filters class:
 
