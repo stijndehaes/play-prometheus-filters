@@ -6,7 +6,7 @@ import io.prometheus.client.CollectorRegistry
 import io.prometheus.client.hotspot.DefaultExports
 
 class PrometheusModule extends Module {
-  private val defaultExportsKey = "play-prometheus-filters.default-exports"
+  private val defaultExportsKey = "play-prometheus-filters.register-default-hotspot-collectors"
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     CollectorRegistry.defaultRegistry.clear()
