@@ -110,4 +110,12 @@ GET         /metrics          com.github.stijndehaes.playprometheusfilters.contr
 
 You should be able to immediately get the metrics
 
-## Example
+## Default Hotspot metrics
+
+The [Prometheus Hotspot library](https://github.com/prometheus/client_java#included-collectors) provides some default collectors
+for garbage collection, memory pool, etc.
+Default these collectors are registered. This can be changed by setting the configuration property to `false`.
+
+```
+play-prometheus-filters.register-default-hotspot-collectors = true
+```

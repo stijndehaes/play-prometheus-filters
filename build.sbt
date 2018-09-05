@@ -37,14 +37,15 @@ lazy val root = (project in file("."))
         </developer>
       </developers>
   )
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.6"
 
-crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
+crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
 libraryDependencies ++= Seq(
   guice,
-  "io.prometheus"             % "simpleclient"          % "0.3.0",
-  "io.prometheus"             % "simpleclient_servlet"  % "0.3.0"
+  "io.prometheus"             % "simpleclient"          % "0.5.0",
+  "io.prometheus"             % "simpleclient_hotspot"  % "0.5.0",
+  "io.prometheus"             % "simpleclient_servlet"  % "0.5.0"
 )
 
 libraryDependencies ++= Seq(
