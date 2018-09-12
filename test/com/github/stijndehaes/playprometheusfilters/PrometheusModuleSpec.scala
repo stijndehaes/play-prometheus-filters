@@ -39,7 +39,6 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers {
       while(mfs.hasMoreElements) {
         exportNames += mfs.nextElement().name
       }
-      println(exportNames)
       exportNames
     }
   }
