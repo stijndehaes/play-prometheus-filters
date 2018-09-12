@@ -2,6 +2,7 @@ package com.github.stijndehaes.playprometheusfilters.filters
 import akka.stream.Materializer
 import com.github.stijndehaes.playprometheusfilters.metrics.RequestMetric
 import io.prometheus.client.Collector
+import play.api.Configuration
 import play.api.mvc.{Filter, RequestHeader, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,21 +31,36 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param mat
   * @param ec
   */
-abstract class MetricsFilter(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+abstract class MetricsFilter(configuration: Configuration)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
   val metrics: List[RequestMetric[_]]
 
+  val excludePaths = {
+    import collection.JavaConverters._
+    Option(configuration.underlying)
+      .map(_.getStringList("play-prometheus-filters.exclude.paths"))
+      .map(_.asScala.toSet)
+      .map(_.map(_.r))
+      .getOrElse(Set.empty)
+  }
+
   def apply(nextFilter: RequestHeader => Future[Result])
            (requestHeader: RequestHeader): Future[Result] = {
+
+    // check if current uri is excluded from metrics
+    def urlIsExcluded = excludePaths.exists(_.findFirstMatchIn(requestHeader.uri).isDefined)
 
     val startTime = System.nanoTime
 
     nextFilter(requestHeader).map { implicit result =>
       implicit val rh = requestHeader
-      val endTime = System.nanoTime
-      val requestTime = (endTime - startTime) / Collector.NANOSECONDS_PER_SECOND
 
-      metrics.foreach(_.mark(requestTime))
+      if (!urlIsExcluded) {
+        val endTime = System.nanoTime
+        val requestTime = (endTime - startTime) / Collector.NANOSECONDS_PER_SECOND
+
+        metrics.foreach(_.mark(requestTime))
+      }
 
       result
     }

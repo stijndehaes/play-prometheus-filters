@@ -8,6 +8,7 @@ import org.mockito.Mockito.verify
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Configuration
 import play.api.libs.typedmap.TypedMap
 import play.api.mvc.Results
 import play.api.routing.{HandlerDef, Router}
@@ -19,18 +20,19 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class StatusAndRouteCounterFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
 
   private implicit val mat = app.materializer
+  private val configuration = mock[Configuration]
 
   "Filter constructor" should {
     "Add a histogram to the prometheus registry" in {
       val collectorRegistry = mock[CollectorRegistry]
-      new StatusAndRouteLatencyFilter(collectorRegistry)
+      new StatusAndRouteLatencyFilter(collectorRegistry, configuration)
       verify(collectorRegistry).register(any())
     }
   }
 
   "Apply method" should {
     "Measure the count" in {
-      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry])
+      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry], configuration)
       val rh = FakeRequest().withAttrs( TypedMap(
         Router.Attrs.HandlerDef -> HandlerDef(null, null, "testController", "test", null, "GET", "/path", null ,null)
       ))
@@ -53,7 +55,7 @@ class StatusAndRouteCounterFilterSpec extends WordSpec with MustMatchers with Mo
     }
 
     "Measure the count for an unmatched route" in {
-      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry])
+      val filter = new StatusAndRouteCounterFilter(mock[CollectorRegistry], configuration)
       val rh = FakeRequest()
       val action = new MockController(stubControllerComponents()).error
 
