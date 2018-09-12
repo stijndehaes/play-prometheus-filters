@@ -33,7 +33,7 @@ class StatusCounterFilterSpec extends WordSpec with MustMatchers with MockitoSug
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestCounter.collect()
+      val metrics = filter.metrics(0).metric.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       samples.get(0).value mustBe 1.0

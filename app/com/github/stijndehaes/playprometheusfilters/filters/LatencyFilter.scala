@@ -1,28 +1,17 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
+import com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics.LatencyOnlyRequestMetricsBuilder
 import com.google.inject.{Inject, Singleton}
-import io.prometheus.client.{CollectorRegistry, Histogram}
-import play.api.mvc.{Filter, RequestHeader, Result}
+import io.prometheus.client.CollectorRegistry
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class LatencyFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class LatencyFilter @Inject()(registry: CollectorRegistry)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter {
 
-  private[filters] val requestLatency = Histogram.build
-    .name("requests_latency_seconds")
-    .help("Request latency in seconds.")
-    .register(registry)
-
-  def apply(nextFilter: RequestHeader => Future[Result])
-    (requestHeader: RequestHeader): Future[Result] = {
-
-    val requestTimer = requestLatency.startTimer
-    nextFilter(requestHeader).map { result =>
-      requestTimer.observeDuration()
-      result
-    }
-  }
-
+  override val metrics = List(
+    LatencyOnlyRequestMetricsBuilder.build(registry, DefaultUnmatchedDefaults)
+  )
 }

@@ -1,29 +1,18 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
+import akka.stream.Materializer
+import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.StatusCounterRequestMetricBuilder
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
+import com.google.inject.Singleton
+import io.prometheus.client.CollectorRegistry
 import javax.inject.Inject
 
-import akka.stream.Materializer
-import com.google.inject.Singleton
-import io.prometheus.client.{CollectorRegistry, Counter}
-import play.api.mvc.{Filter, RequestHeader, Result}
-
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class StatusCounterFilter @Inject()(registry: CollectorRegistry) (implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class StatusCounterFilter @Inject()(registry: CollectorRegistry)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter {
 
-  private[filters] val requestCounter = Counter.build()
-    .name("http_requests_total")
-    .help("Total amount of requests")
-    .labelNames("status")
-    .register(registry)
-
-  def apply(nextFilter: RequestHeader => Future[Result])
-    (requestHeader: RequestHeader): Future[Result] = {
-
-    nextFilter(requestHeader).map { result =>
-      requestCounter.labels(result.header.status.toString).inc()
-      result
-    }
-  }
+  override val metrics = List(
+    StatusCounterRequestMetricBuilder.build(registry, DefaultUnmatchedDefaults)
+  )
 }

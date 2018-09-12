@@ -1,5 +1,6 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
@@ -38,7 +39,7 @@ class StatusAndRouteLatencyAndCounterFilterSpec extends WordSpec with MustMatche
 
       await(filter(action)(rh).run())
 
-      val latencyMetrics = filter.requestLatency.collect()
+      val latencyMetrics = filter.metrics(0).metric.collect()
       latencyMetrics must have size 1
       val latencySamples = latencyMetrics.get(0).samples
       val latencySample = latencySamples.get(latencySamples.size() - 2)
@@ -50,7 +51,7 @@ class StatusAndRouteLatencyAndCounterFilterSpec extends WordSpec with MustMatche
       latencySample.labelValues.get(3) mustBe "/path"
       latencySample.labelValues.get(4) mustBe "GET"
 
-      val countMetrics = filter.requestCounter.collect()
+      val countMetrics = filter.metrics(1).metric.collect()
       countMetrics must have size 1
       val countSamples = countMetrics.get(0).samples
       val countSample = countSamples.get(0)
@@ -70,30 +71,30 @@ class StatusAndRouteLatencyAndCounterFilterSpec extends WordSpec with MustMatche
 
       await(filter(action)(rh).run())
 
-      val latencyMetrics = filter.requestLatency.collect()
+      val latencyMetrics = filter.metrics(0).metric.collect()
       latencyMetrics must have size 1
       val latencySamples = latencyMetrics.get(0).samples
       val latencySample = latencySamples.get(latencySamples.size() - 2)
 
       latencySample.value mustBe 1.0
       latencySample.labelValues must have size 5
-      latencySample.labelValues.get(0) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedRoute
+      latencySample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
       latencySample.labelValues.get(1) mustBe "404"
-      latencySample.labelValues.get(2) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedController
-      latencySample.labelValues.get(3) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedPath
-      latencySample.labelValues.get(4) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedVerb
+      latencySample.labelValues.get(2) mustBe DefaultUnmatchedDefaults.UnmatchedControllerString
+      latencySample.labelValues.get(3) mustBe DefaultUnmatchedDefaults.UnmatchedPathString
+      latencySample.labelValues.get(4) mustBe DefaultUnmatchedDefaults.UnmatchedVerbString
 
-      val countMetrics = filter.requestCounter.collect()
+      val countMetrics = filter.metrics(1).metric.collect()
       countMetrics must have size 1
       val countSamples = countMetrics.get(0).samples
       val countSample = countSamples.get(0)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 5
-      countSample.labelValues.get(0) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedRoute
+      countSample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
       countSample.labelValues.get(1) mustBe "404"
-      countSample.labelValues.get(2) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedController
-      countSample.labelValues.get(3) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedPath
-      countSample.labelValues.get(4) mustBe StatusAndRouteLatencyAndCounterFilter.unmatchedVerb
+      countSample.labelValues.get(2) mustBe DefaultUnmatchedDefaults.UnmatchedControllerString
+      countSample.labelValues.get(3) mustBe DefaultUnmatchedDefaults.UnmatchedPathString
+      countSample.labelValues.get(4) mustBe DefaultUnmatchedDefaults.UnmatchedVerbString
     }
   }
 

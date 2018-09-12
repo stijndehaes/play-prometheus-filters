@@ -1,5 +1,6 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
@@ -37,7 +38,7 @@ class StatusAndRouteCounterFilterSpec extends WordSpec with MustMatchers with Mo
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestCounter.collect()
+      val metrics = filter.metrics(0).metric.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       //this is the count sample
@@ -58,18 +59,18 @@ class StatusAndRouteCounterFilterSpec extends WordSpec with MustMatchers with Mo
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestCounter.collect()
+      val metrics = filter.metrics(0).metric.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       //this is the count sample
       val countSample = samples.get(0)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 5
-      countSample.labelValues.get(0) mustBe StatusAndRouteCounterFilter.unmatchedRoute
+      countSample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
       countSample.labelValues.get(1) mustBe "404"
-      countSample.labelValues.get(2) mustBe StatusAndRouteCounterFilter.unmatchedController
-      countSample.labelValues.get(3) mustBe StatusAndRouteCounterFilter.unmatchedPath
-      countSample.labelValues.get(4) mustBe StatusAndRouteCounterFilter.unmatchedVerb
+      countSample.labelValues.get(2) mustBe DefaultUnmatchedDefaults.UnmatchedControllerString
+      countSample.labelValues.get(3) mustBe DefaultUnmatchedDefaults.UnmatchedPathString
+      countSample.labelValues.get(4) mustBe DefaultUnmatchedDefaults.UnmatchedVerbString
     }
   }
 

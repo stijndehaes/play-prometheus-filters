@@ -33,7 +33,7 @@ class LatencyFilterSpec extends PlaySpec with MockitoSugar with Results with Def
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.requestLatency.collect()
+      val metrics = filter.metrics(0).metric.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       //this is the count sample
