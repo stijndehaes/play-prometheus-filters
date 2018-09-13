@@ -150,7 +150,18 @@ _You probably would not want to use dynamic default properties on a Latency or S
   }
   ```
  
+## Excluding paths from metrics
+A path can be excluded from metrics by adding it to the `play-prometheus-filters.exclude.paths` property in the `application.conf`.
+E.g. when using the `PrometheusController` you might want to exclude the path on which you configured the controller in the `routes` file.
 
+By default, the `/metrics` is excluded.
+
+```
+play-prometheus-filters {
+  # exclude /metrics endpoint assuming PrometheusController is routed to this uri
+  exclude.paths = ["/metrics"]
+}
+```
 
 ## Prometheus controller
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
