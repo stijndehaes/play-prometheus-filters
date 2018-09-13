@@ -18,6 +18,7 @@ trait RequestMetric[M <: SimpleCollector[_]] {
   def pathLabel(implicit requestHeader: RequestHeader): String = requestHeader.attrs
     .get(Router.Attrs.HandlerDef)
     .map(_.path)
+    .map(_.replaceAll("<\\[\\^/]\\+>", "")) // remove dynamic part from argument so it's more readable
     .getOrElse(unmatchedDefaults.unmatchedPath(requestHeader))
 
   def methodLabel(implicit requestHeader: RequestHeader): String = requestHeader.attrs
