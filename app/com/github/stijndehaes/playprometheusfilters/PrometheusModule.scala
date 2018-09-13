@@ -13,6 +13,8 @@ class PrometheusModule extends Module {
   import PrometheusModule._
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
+    CollectorRegistry.defaultRegistry.clear()
+
     configuration.getOptional[Boolean](defaultExportsKey).foreach { enabled =>
       if (enabled) {
         DefaultExports.initialize()
