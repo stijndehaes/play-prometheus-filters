@@ -7,12 +7,13 @@ import play.api.mvc.RequestHeader
   * This allows for customization per metric what to return in case a value does not exist.
   *
   * E.g. instead of returning a 'unmatchedVerbe' string, could get the actual verbe from the [[RequestHeader]].
-  * ```
+  *
+  * {{{
   * case object MyDefaults extends UnmatchedDefaults {
   *   // return actual http method from request
   *   override  val unmatchedVerb: RequestHeader => String = rh => rh.method
   * }
-  * ```
+  * }}}
   */
 trait UnmatchedDefaults {
 

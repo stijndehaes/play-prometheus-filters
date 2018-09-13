@@ -9,6 +9,10 @@ import play.api.Configuration
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * A simple [[MetricsFilter]] using a counter metric to count requests.
+  * Only adds a 'route' label.
+  */
 @Singleton
 class RouteLatencyFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
 

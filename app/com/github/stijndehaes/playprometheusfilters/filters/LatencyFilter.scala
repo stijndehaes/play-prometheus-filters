@@ -9,6 +9,9 @@ import play.api.Configuration
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * A simple [[MetricsFilter]] using a histogram metric to record latency without any labels.
+  */
 @Singleton
 class LatencyFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
 

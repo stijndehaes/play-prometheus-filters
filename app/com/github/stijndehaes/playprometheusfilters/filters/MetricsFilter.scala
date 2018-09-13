@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Generic filter implementation to add metrics for a request.
   * Subclasses only have to define the `metrics` property to apply metrics.
   *
-  * ```
+  * {{{
   * @Singleton
   * class MyFilter @Inject()(registry: CollectorRegistry)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter {
   *
@@ -19,13 +19,13 @@ import scala.concurrent.{ExecutionContext, Future}
   *     LatencyOnlyRequestMetricsBuilder.build(registry, DefaultUnmatchedDefaults)
   *   )
   * }
-  * ```
+  * }}}
   *
-  * Metrics can be created by using a [[com.github.stijndehaes.playprometheusfilters.metrics.RequestMetricBuilder]].
+  * Metrics can be created by using a [[com.github.stijndehaes.playprometheusfilters.metrics.RequestMetricBuilder RequestMetricBuilder]].
   * The builder creates and configures the metrics for the class instance.
   *
-  * See [[com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics]] and
-  * [[com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics]] for some provided
+  * See [[com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics CounterRequestMetrics]] and
+  * [[com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics LatencyRequestMetrics]] for some provided
   * builders.
   *
   * @param mat

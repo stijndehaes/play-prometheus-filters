@@ -9,6 +9,10 @@ import play.api.Configuration
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * A [[MetricsFilter]] using a histogram metric to record latency.
+  * Latency metric adds 'RouteActionMethod', 'Status', 'Controller', 'Path' and 'Verb' labels.
+  */
 @Singleton
 class StatusAndRouteLatencyFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
 

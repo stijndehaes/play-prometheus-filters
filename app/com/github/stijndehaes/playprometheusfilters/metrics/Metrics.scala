@@ -64,8 +64,8 @@ trait RequestMetricBuilder[RM <: RequestMetric[_]] {
 /**
   * Provides some builders counter request metrics.
   *
-  * - StatusCounterRequestMetricBuilder: count with response status code label
-  * - CounterRequestMetricBuilder: count requests with labels method, status, controller, path and verb
+  *  - StatusCounterRequestMetricBuilder: count with response status code label
+  *  - CounterRequestMetricBuilder: count requests with labels method, status, controller, path and verb
   */
 object CounterRequestMetrics {
 
@@ -110,9 +110,9 @@ object CounterRequestMetrics {
 /**
   * Provides some builders latency request metrics.
   *
-  * - LatencyRequestMetricsBuilder: observe latency with route, status, controller, path and verb labels.
-  * - LatencyOnlyRequestMetricsBuilder: only observe latency. No labels.
-  * - RouteLatencyRequestMetricsBuilder: observe latency with only route label.
+  *  - LatencyRequestMetricsBuilder: observe latency with route, status, controller, path and verb labels.
+  *  - LatencyOnlyRequestMetricsBuilder: only observe latency. No labels.
+  *  - RouteLatencyRequestMetricsBuilder: observe latency with only route label.
   */
 object LatencyRequestMetrics {
   /**
