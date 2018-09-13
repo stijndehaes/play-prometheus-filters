@@ -1,15 +1,22 @@
 package com.github.stijndehaes.playprometheusfilters
 
 import io.prometheus.client.CollectorRegistry
-import org.scalatest.{MustMatchers, WordSpec}
+import org.scalatest.{BeforeAndAfter, MustMatchers, WordSpec}
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class PrometheusModuleSpec extends WordSpec with MustMatchers {
+class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfter {
+
+  before {
+    // clearing registry before each test
+    CollectorRegistry.defaultRegistry.clear()
+  }
 
   "PrometheusModule" should {
     "register default exporters when enabled" in {
       // default enabled
-      val app = new GuiceApplicationBuilder().build()
+      val app = new GuiceApplicationBuilder()
+        .configure(PrometheusModule.defaultExportsKey -> true)
+        .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
       collector.getExporterNames.size must be > 0
