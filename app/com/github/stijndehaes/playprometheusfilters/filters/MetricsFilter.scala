@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 abstract class MetricsFilter(configuration: Configuration)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
 
-  val metrics: List[RequestMetric[_]]
+  val metrics: List[RequestMetric[_, RequestHeader, Result]]
 
   val excludePaths = {
     import collection.JavaConverters._

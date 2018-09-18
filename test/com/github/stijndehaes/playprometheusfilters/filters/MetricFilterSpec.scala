@@ -25,7 +25,7 @@ class MetricFilterSpec extends PlaySpec with MockitoSugar with Results with Defa
     "Get exclude paths from configuration" in {
       implicit val mat = app.materializer
       val filter = new MetricsFilter(configuration) {
-        override val metrics = List.empty[RequestMetric[_]]
+        override val metrics = List.empty[RequestMetric[_, RequestHeader, Result]]
       }
 
       filter.excludePaths must have size 1 // only check size since cannot compare Regex's

@@ -9,22 +9,43 @@ import play.api.routing.Router
   *
   * @tparam M Type of metric. E.g. Counter or Histogram.
   */
-trait RequestMetric[M <: SimpleCollector[_]] {
+trait RequestMetric[M <: SimpleCollector[_], Req, Res] {
   val metric: M
-  val unmatchedDefaults: UnmatchedDefaults[RequestHeader]
+  val unmatchedDefaults: UnmatchedDefaults[Req]
 
-  def mark(requestTime: Double)(implicit requestHeader: RequestHeader, result: Result): Unit
+  def mark(requestTime: Double)(implicit requestHeader: Req, result: Res): Unit
 
-  def pathLabel(implicit requestHeader: RequestHeader): String = requestHeader.attrs
+  def pathLabel(implicit request: Req): String
+
+  def methodLabel(implicit request: Req): String
+
+  def statusLabel(implicit result: Res): String
+
+  def controllerLabel(implicit requestHeader: Req): String
+
+  def verbLabel(implicit requestHeader: Req): String
+
+  def routeLabel(implicit requestHeader: Req): String
+}
+
+/**
+  * Play implementation of RequestMetric.
+  * Fixes Req type to [[RequestHeader]] and Res to [[Result]].
+  *
+  * @tparam M Type of metric. E.g. Counter or Histogram.
+  */
+trait PlayRequestMetric[M <: SimpleCollector[_]] extends RequestMetric[M, RequestHeader, Result] {
+
+  def pathLabel(implicit request: RequestHeader): String = request.attrs
     .get(Router.Attrs.HandlerDef)
     .map(_.path)
     .map(_.replaceAll("<\\[\\^/]\\+>", "")) // remove dynamic part from argument so it's more readable
-    .getOrElse(unmatchedDefaults.unmatchedPath(requestHeader))
+    .getOrElse(unmatchedDefaults.unmatchedPath(request))
 
-  def methodLabel(implicit requestHeader: RequestHeader): String = requestHeader.attrs
+  def methodLabel(implicit request: RequestHeader): String = request.attrs
     .get(Router.Attrs.HandlerDef)
     .map(_.method)
-    .getOrElse(unmatchedDefaults.unmatchedRoute(requestHeader))
+    .getOrElse(unmatchedDefaults.unmatchedRoute(request))
 
   def statusLabel(implicit result: Result) = result.header.status.toString
 
@@ -47,19 +68,19 @@ trait RequestMetric[M <: SimpleCollector[_]] {
 /**
   * Counter metric implementation.
   */
-abstract class CounterRequestMetric(val metric: Counter, val unmatchedDefaults: UnmatchedDefaults[RequestHeader]) extends RequestMetric[Counter]
+abstract class CounterRequestMetric(val metric: Counter, val unmatchedDefaults: UnmatchedDefaults[RequestHeader]) extends PlayRequestMetric[Counter]
 
 /**
   * Latency metric implementation using a histogram.
   */
-abstract class LatencyRequestMetric(val metric: Histogram, val unmatchedDefaults: UnmatchedDefaults[RequestHeader]) extends RequestMetric[Histogram]
+abstract class LatencyRequestMetric(val metric: Histogram, val unmatchedDefaults: UnmatchedDefaults[RequestHeader]) extends PlayRequestMetric[Histogram]
 
 /**
   * A generic request metric builder.
   * @tparam RM Type of request metric.
   */
-trait RequestMetricBuilder[RM <: RequestMetric[_], T] {
-  def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[T]): RM
+trait RequestMetricBuilder[Req, Res, RM <: RequestMetric[_, Req, Res]] {
+  def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[Req]): RM
 }
 
 /**
@@ -73,7 +94,8 @@ object CounterRequestMetrics {
   /**
     * Count requests with status label
     */
-  object StatusCounterRequestMetricBuilder extends RequestMetricBuilder[CounterRequestMetric, RequestHeader] {
+  object StatusCounterRequestMetricBuilder extends RequestMetricBuilder[RequestHeader, Result, CounterRequestMetric] {
+
     override def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[RequestHeader]): CounterRequestMetric = {
       val counter = Counter.build()
         .name("http_requests_total")
@@ -92,7 +114,7 @@ object CounterRequestMetrics {
   /**
     * Count requests with labels method, status, controller, path and verb
     */
-  object CounterRequestMetricBuilder extends RequestMetricBuilder[CounterRequestMetric, RequestHeader] {
+  object CounterRequestMetricBuilder extends RequestMetricBuilder[RequestHeader, Result, CounterRequestMetric] {
     override def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[RequestHeader]): CounterRequestMetric = {
       val counter = Counter.build()
         .name("http_requests_total")
@@ -119,7 +141,7 @@ object LatencyRequestMetrics {
   /**
     * Observe latency with route, status, controller, path and verb labels.
     */
-  object LatencyRequestMetricsBuilder extends RequestMetricBuilder[LatencyRequestMetric, RequestHeader] {
+  object LatencyRequestMetricsBuilder extends RequestMetricBuilder[RequestHeader, Result, LatencyRequestMetric] {
     override def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[RequestHeader]) = {
       val metric = Histogram.build
         .name("requests_latency_seconds")
@@ -138,7 +160,7 @@ object LatencyRequestMetrics {
   /**
     * Only observe latency. No labels.
     */
-  object LatencyOnlyRequestMetricsBuilder extends RequestMetricBuilder[LatencyRequestMetric, RequestHeader] {
+  object LatencyOnlyRequestMetricsBuilder extends RequestMetricBuilder[RequestHeader, Result, LatencyRequestMetric] {
     override def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[RequestHeader]) = {
       val metric = Histogram.build
         .name("requests_latency_seconds")
@@ -155,7 +177,7 @@ object LatencyRequestMetrics {
   /**
     * Observe latency with only route label.
     */
-  object RouteLatencyRequestMetricsBuilder extends RequestMetricBuilder[LatencyRequestMetric, RequestHeader] {
+  object RouteLatencyRequestMetricsBuilder extends RequestMetricBuilder[RequestHeader, Result, LatencyRequestMetric] {
     override def build(registry: CollectorRegistry, unmatchedDefaults: UnmatchedDefaults[RequestHeader]) = {
       val metric = Histogram.build
         .name("requests_latency_seconds")
