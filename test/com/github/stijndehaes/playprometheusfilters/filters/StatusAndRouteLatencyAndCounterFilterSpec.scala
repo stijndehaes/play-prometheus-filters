@@ -1,6 +1,6 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
@@ -80,11 +80,11 @@ class StatusAndRouteLatencyAndCounterFilterSpec extends WordSpec with MustMatche
 
       latencySample.value mustBe 1.0
       latencySample.labelValues must have size 5
-      latencySample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
+      latencySample.labelValues.get(0) mustBe DefaultPlayUnmatchedDefaults.UnmatchedRouteString
       latencySample.labelValues.get(1) mustBe "404"
-      latencySample.labelValues.get(2) mustBe DefaultUnmatchedDefaults.UnmatchedControllerString
-      latencySample.labelValues.get(3) mustBe DefaultUnmatchedDefaults.UnmatchedPathString
-      latencySample.labelValues.get(4) mustBe DefaultUnmatchedDefaults.UnmatchedVerbString
+      latencySample.labelValues.get(2) mustBe DefaultPlayUnmatchedDefaults.UnmatchedControllerString
+      latencySample.labelValues.get(3) mustBe DefaultPlayUnmatchedDefaults.UnmatchedPathString
+      latencySample.labelValues.get(4) mustBe DefaultPlayUnmatchedDefaults.UnmatchedVerbString
 
       val countMetrics = filter.metrics(1).metric.collect()
       countMetrics must have size 1
@@ -92,12 +92,11 @@ class StatusAndRouteLatencyAndCounterFilterSpec extends WordSpec with MustMatche
       val countSample = countSamples.get(0)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 5
-      countSample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
+      countSample.labelValues.get(0) mustBe DefaultPlayUnmatchedDefaults.UnmatchedRouteString
       countSample.labelValues.get(1) mustBe "404"
-      countSample.labelValues.get(2) mustBe DefaultUnmatchedDefaults.UnmatchedControllerString
-      countSample.labelValues.get(3) mustBe DefaultUnmatchedDefaults.UnmatchedPathString
-      countSample.labelValues.get(4) mustBe DefaultUnmatchedDefaults.UnmatchedVerbString
+      countSample.labelValues.get(2) mustBe DefaultPlayUnmatchedDefaults.UnmatchedControllerString
+      countSample.labelValues.get(3) mustBe DefaultPlayUnmatchedDefaults.UnmatchedPathString
+      countSample.labelValues.get(4) mustBe DefaultPlayUnmatchedDefaults.UnmatchedVerbString
     }
   }
-
 }

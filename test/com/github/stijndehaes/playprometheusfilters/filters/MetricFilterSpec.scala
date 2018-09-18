@@ -1,7 +1,7 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
 import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.CounterRequestMetricBuilder
-import com.github.stijndehaes.playprometheusfilters.metrics.{DefaultUnmatchedDefaults, RequestMetric}
+import com.github.stijndehaes.playprometheusfilters.metrics.{DefaultPlayUnmatchedDefaults, RequestMetric}
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import com.typesafe.config.ConfigFactory
 import io.prometheus.client.CollectorRegistry
@@ -38,7 +38,7 @@ class MetricFilterSpec extends PlaySpec with MockitoSugar with Results with Defa
       val collectorRegistry = mock[CollectorRegistry]
       val filter = new MetricsFilter(configuration) {
         override val metrics = List(
-          CounterRequestMetricBuilder.build(collectorRegistry, DefaultUnmatchedDefaults)
+          CounterRequestMetricBuilder.build(collectorRegistry, DefaultPlayUnmatchedDefaults)
         )
       }
 
@@ -53,5 +53,4 @@ class MetricFilterSpec extends PlaySpec with MockitoSugar with Results with Defa
       samples.size() mustBe 0 // expect no metrics
     }
   }
-
 }

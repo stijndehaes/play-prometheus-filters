@@ -1,6 +1,6 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import com.github.stijndehaes.playprometheusfilters.metrics.DefaultUnmatchedDefaults
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
@@ -64,7 +64,7 @@ class RouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSuga
       val countSample = samples.get(samples.size() - 2)
       countSample.value mustBe 1.0
       countSample.labelValues must have size 1
-      countSample.labelValues.get(0) mustBe DefaultUnmatchedDefaults.UnmatchedRouteString
+      countSample.labelValues.get(0) mustBe DefaultPlayUnmatchedDefaults.UnmatchedRouteString
     }
   }
 
