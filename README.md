@@ -15,7 +15,7 @@ To use the library add the following to you build.sbt:
 libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.5.0"
 
 ```
-This version only supports play 2.6.
+This latest version supports play 2.7.
 For more info on play version compatibility see the releases matrix.
 
 
