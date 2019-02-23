@@ -1,7 +1,7 @@
 name := "play-prometheus-filters"
 organization := "com.github.stijndehaes"
 
-version := "0.4.0"
+version := "0.5.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -42,18 +42,18 @@ lazy val root = (project in file("."))
         </developer>
       </developers>
   )
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.8"
 
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
 libraryDependencies ++= Seq(
-  "io.prometheus"             % "simpleclient"          % "0.5.0",
-  "io.prometheus"             % "simpleclient_hotspot"  % "0.5.0",
-  "io.prometheus"             % "simpleclient_servlet"  % "0.5.0",
+  "io.prometheus"             % "simpleclient"          % "0.6.0",
+  "io.prometheus"             % "simpleclient_hotspot"  % "0.6.0",
+  "io.prometheus"             % "simpleclient_servlet"  % "0.6.0",
 
   // Play libs. Are provided not to enforce a specific version.
-  "com.typesafe.play"         %% "play"                 % "2.6.18" % Provided,
-  "com.typesafe.play"         %% "play-guice"           % "2.6.18" % Provided
+  "com.typesafe.play"         %% "play"                 % "2.7.0" % Provided,
+  "com.typesafe.play"         %% "play-guice"           % "2.7.0" % Provided
 )
 
 libraryDependencies ++= Seq(
