@@ -4,8 +4,11 @@ organization := "com.github.stijndehaes"
 version := "0.5.0"
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala)
   .settings(
+    scalaSource in Compile := baseDirectory.value / "app",
+    scalaSource in Test := baseDirectory.value / "test",
+    resourceDirectory in Compile := baseDirectory.value / "conf",
+    resourceDirectory in Test := baseDirectory.value / "test" / "resources",
     publishTo := {
       val nexus = "https://oss.sonatype.org/"
       if (version.value.trim.endsWith("SNAPSHOT"))
@@ -42,7 +45,8 @@ scalaVersion := "2.12.8"
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
 libraryDependencies ++= Seq(
-  guice,
+  guice % Provided,
+  playCore % Provided,
   "io.prometheus"             % "simpleclient"          % "0.6.0",
   "io.prometheus"             % "simpleclient_hotspot"  % "0.6.0",
   "io.prometheus"             % "simpleclient_servlet"  % "0.6.0"
