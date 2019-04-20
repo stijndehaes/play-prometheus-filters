@@ -1,18 +1,16 @@
 package com.github.stijndehaes.playprometheusfilters
 
-import io.prometheus.client.CollectorRegistry
-import org.scalatest.{BeforeAndAfter, MustMatchers, WordSpec}
-import org.slf4j.LoggerFactory
+import io.prometheus.client.{Collector, CollectorRegistry}
+import org.scalatest.{BeforeAndAfter, MustMatchers, PrivateMethodTester, WordSpec}
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfter {
+class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfter with PrivateMethodTester with GuiceOneAppPerTest {
 
   before {
     // clearing registry before each test
     CollectorRegistry.defaultRegistry.clear()
   }
-
-  private val logger = LoggerFactory.getLogger(classOf[PrometheusModuleSpec])
 
   "PrometheusModule" should {
     "register default exporters when enabled" in {
@@ -20,9 +18,10 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
       val app = new GuiceApplicationBuilder()
         .configure(PrometheusModule.defaultExportsKey -> true)
         .build()
+
       val collector = app.injector.instanceOf[CollectorRegistry]
-      logger.info(s"More elements: ${collector.metricFamilySamples.hasMoreElements}")
-      collector.metricFamilySamples.hasMoreElements mustBe true
+      val collectors = PrivateMethod[java.util.HashSet[Collector]]('collectors)
+      (collector invokePrivate collectors()).size must be > 0
     }
 
     "not register default exporters when disabled" in {
@@ -32,8 +31,25 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
         .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
-      collector.metricFamilySamples.hasMoreElements mustBe false
+      val collectors = PrivateMethod[java.util.HashSet[Collector]]('collectors)
+      (collector invokePrivate collectors()).size must be (0)
     }
   }
 
+  /**
+    * Utility to expose exporter names for test on [[CollectorRegistry]].
+    */
+  implicit class CollectorRegistryExtention(val registry: CollectorRegistry) {
+    /**
+      * @return Registered exporter names.
+      */
+    def getExporterNames: Seq[String] = {
+      val exportNames = collection.mutable.Buffer.empty[String]
+      val mfs = registry.metricFamilySamples()
+      while(mfs.hasMoreElements) {
+        exportNames += mfs.nextElement().name
+      }
+      exportNames
+    }
+  }
 }
