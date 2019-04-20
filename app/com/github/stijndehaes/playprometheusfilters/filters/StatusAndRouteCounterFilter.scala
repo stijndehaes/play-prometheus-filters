@@ -1,56 +1,22 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
-import com.google.inject.{Inject, Singleton}
-import io.prometheus.client.{CollectorRegistry, Counter}
-import play.api.mvc.{Filter, RequestHeader, Result}
-import play.api.routing.Router
+import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.CounterRequestMetricBuilder
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
+import io.prometheus.client.CollectorRegistry
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
+/**
+  * A [[MetricsFilter]] using a counter metric to count requests.
+  * Adds a 'method', 'status', 'controller', 'path' and 'verb' labels.
+  */
 @Singleton
-class StatusAndRouteCounterFilter @Inject()(registry: CollectorRegistry)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class StatusAndRouteCounterFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
 
-  private[filters] val requestCounter = Counter.build()
-    .name("http_requests_total")
-    .help("Total amount of requests")
-    .labelNames("method", "status", "controller", "path", "verb")
-    .register(registry)
-
-  def apply(nextFilter: RequestHeader => Future[Result])
-    (requestHeader: RequestHeader): Future[Result] = {
-
-    nextFilter(requestHeader).map { result =>
-      val methodLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.method)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedRoute)
-      val statusLabel = result.header.status.toString
-      val controllerLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.controller)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedController)
-      val pathLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.path)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedPath)
-      val verbLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.verb)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedVerb)
-      requestCounter.labels(methodLabel, statusLabel, controllerLabel, pathLabel, verbLabel).inc()
-      result
-    }
-  }
-
+  override val metrics = List(
+    CounterRequestMetricBuilder.build(registry, DefaultPlayUnmatchedDefaults)
+  )
 }
-
-object StatusAndRouteCounterFilter {
-  val unmatchedRoute: String = "unmatchedRoute"
-  val unmatchedController: String = "unmatchedController"
-  val unmatchedPath: String = "unmatchedPath"
-  val unmatchedVerb: String = "unmatchedVerb"
-}
-
-
-

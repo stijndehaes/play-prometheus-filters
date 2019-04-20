@@ -102,6 +102,68 @@ And the enable this filter in the application.conf
 play.http.filters=com.example.MyFilters
 ```
 
+## Customizing metrics or building your own filters
+
+The setup of a filter is very simple: extend the `MetricFilter` class and define a `metrics` property with a list of metrics
+you want your filter to use.
+
+E.g. the `LatencyFilter` looks like this:
+```scala
+@Singleton
+class LatencyFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
+
+  override val metrics = List(
+    LatencyOnlyRequestMetricsBuilder.build(registry, DefaultUnmatchedDefaults)
+  )
+}
+``` 
+
+The `@Singleton` annotation ensures the application creates only a single instance of it.
+Via the `@Inject` annotation, Play will automatically pass available instances into the contructor (using [Guice DI](https://github.com/google/guice/wiki/Motivation)).
+The `CollectorRegistry` is needed to register a metric. The `Configuration` may contain information about paths to exclude for metrics.
+This is handled by the `MetricsFilter` class.
+
+You can customize a filter in different ways
+
+- Define one or more metrics in the `metrics` list (other than in the filters already provided).
+See `CounterRequestMetrics` and `LatencyRequestMetrics` for provided metric types.
+
+- You can define you own metric. E.g. currently only `Counter` and `Histogram` (Latency) metrics are provided.
+If you'd like to use Prometheus's `Summary` or `Gauge` metric, you can implement your own metric by creating
+a `RequestMetric` implementation and a corresponding `RequestMetricBuilder`.  
+See `CounterRequestMetrics` and `LatencyRequestMetrics` for how to implement your own builder and metric.  
+The builder, `builds` sets up the metrics instance with a name, help, labels, etc and registers the metric.
+Then it returns a `RequestMetric` instance which uses the metric. Implement the `mark` function to pass labels 
+to the metric using data from either the request or response, then call the 'metric'-function like `observe` or `inc`
+to apply the metrics.
+
+- Customize the handling of defaults in case a certain label cannot be found.
+This can be done by providing a custom `UnmachedDefaults` implementation. The default implementation
+always returns a fixed string like `unmatchedPath` if the `path` property cannot be determined.
+
+  E.g. a custom implementation could use the 'uri' property from the request, which is always available, instead of just a fixed string.
+Using this on a Counter metric would give you insight into which non-existing urls are being used. A country creates a single metric bucket per unique uri.   
+_You probably would not want to use dynamic default properties on a Latency or Summary metric since that would give many metric buckets per unique url`_
+
+  ```scala
+  case object DynamicUnmatchedDefaults extends UnmatchedDefaults {
+    val unmatchedPath: RequestHeader => String = _.uri
+  }
+  ```
+ 
+## Excluding paths from metrics
+A path can be excluded from metrics by adding it to the `play-prometheus-filters.exclude.paths` property in the `application.conf`.
+E.g. when using the `PrometheusController` you might want to exclude the path on which you configured the controller in the `routes` file.
+
+By default, the `/metrics` is excluded.
+
+```
+play-prometheus-filters {
+  # exclude /metrics endpoint assuming PrometheusController is routed to this uri
+  exclude.paths = ["/metrics"]
+}
+```
+
 ## Prometheus controller
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 

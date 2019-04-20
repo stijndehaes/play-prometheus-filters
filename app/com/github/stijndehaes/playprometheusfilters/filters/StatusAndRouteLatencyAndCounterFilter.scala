@@ -1,70 +1,26 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
 import akka.stream.Materializer
-import com.google.inject.{Inject, Singleton}
-import io.prometheus.client.{Collector, CollectorRegistry, Counter, Histogram}
-import play.api.mvc.{Filter, RequestHeader, Result}
-import play.api.routing.Router
+import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.CounterRequestMetricBuilder
+import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
+import com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics.LatencyRequestMetricsBuilder
+import io.prometheus.client._
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
+/**
+  * A [[MetricsFilter]] using a both a histogram and counter metric to record latency and count requests.
+  *
+  * Latency metric adds 'RouteActionMethod', 'Status', 'Controller', 'Path' and 'Verb' labels.  
+  * Counter metric adds 'method', 'status', 'controller', 'path' and 'verb' labels.
+  */
 @Singleton
-class StatusAndRouteLatencyAndCounterFilter @Inject()(registry: CollectorRegistry)(implicit val mat: Materializer, ec: ExecutionContext) extends Filter {
+class StatusAndRouteLatencyAndCounterFilter @Inject()(registry: CollectorRegistry, configuration: Configuration)(implicit mat: Materializer, ec: ExecutionContext) extends MetricsFilter(configuration) {
 
-  private[filters] val requestCounter = Counter.build()
-    .name("http_requests_total")
-    .help("Total amount of requests")
-    .labelNames("method", "status", "controller", "path", "verb")
-    .register(registry)
-
-  private[filters] val requestLatency = Histogram.build
-    .name("requests_latency_seconds")
-    .help("Request latency in seconds.")
-    .labelNames("RouteActionMethod", "Status", "Controller", "Path", "Verb")
-    .register(registry)
-
-  def apply(nextFilter: RequestHeader => Future[Result])
-    (requestHeader: RequestHeader): Future[Result] = {
-
-    val startTime = System.nanoTime
-
-    nextFilter(requestHeader).map { result =>
-      val endTime = System.nanoTime
-      val requestTime = (endTime - startTime) / Collector.NANOSECONDS_PER_SECOND
-      val methodLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.method)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedRoute)
-      val statusLabel = result.header.status.toString
-      val controllerLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.controller)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedController)
-      val pathLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.path)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedPath)
-      val verbLabel = requestHeader.attrs
-        .get(Router.Attrs.HandlerDef)
-        .map(_.verb)
-        .getOrElse(StatusAndRouteLatencyFilter.unmatchedVerb)
-      requestLatency.labels(methodLabel, statusLabel, controllerLabel, pathLabel, verbLabel).observe(requestTime)
-      requestCounter.labels(methodLabel, statusLabel, controllerLabel, pathLabel, verbLabel).inc()
-      result
-    }
-  }
-
+  override val metrics = List(
+    LatencyRequestMetricsBuilder.build(registry, DefaultPlayUnmatchedDefaults),
+    CounterRequestMetricBuilder.build(registry, DefaultPlayUnmatchedDefaults)
+  )
 }
-
-object StatusAndRouteLatencyAndCounterFilter {
-  val unmatchedRoute: String = "unmatchedRoute"
-  val unmatchedController: String = "unmatchedController"
-  val unmatchedPath: String = "unmatchedPath"
-  val unmatchedVerb: String = "unmatchedVerb"
-}
-
-
-
-
-
-
