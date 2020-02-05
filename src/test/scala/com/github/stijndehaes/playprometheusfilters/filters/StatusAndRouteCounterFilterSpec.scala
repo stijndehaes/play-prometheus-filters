@@ -5,7 +5,7 @@ import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration

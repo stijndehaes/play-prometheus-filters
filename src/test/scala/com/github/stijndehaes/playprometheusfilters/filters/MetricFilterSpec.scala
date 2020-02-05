@@ -5,7 +5,7 @@ import com.github.stijndehaes.playprometheusfilters.metrics.{DefaultPlayUnmatche
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import com.typesafe.config.ConfigFactory
 import io.prometheus.client.CollectorRegistry
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
