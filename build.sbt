@@ -1,7 +1,7 @@
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 name := "play-prometheus-filters"
-organization := "dk.jyllandsposten"
+organization := "io.github.jyllands-posten"
 
 version := "0.6.0-SNAPSHOT"
 
