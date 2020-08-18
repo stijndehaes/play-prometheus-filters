@@ -1,3 +1,5 @@
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 name := "play-prometheus-filters"
 organization := "dk.jyllandsposten"
 
@@ -30,11 +32,11 @@ lazy val root = (project in file("."))
         <connection>scm:git:git@github.com:Jyllands-Posten/play-prometheus-filters.git</connection>
       </scm>
   )
+
 scalaVersion := "2.13.1"
+crossScalaVersions := Seq(scalaVersion.value, "2.12.12")
 
-crossScalaVersions := Seq(scalaVersion.value, "2.12.8")
-
-val playVersion = "2.8.0"
+val playVersion = "2.8.2"
 val prometheusClientVersion = "0.8.1"
 
 libraryDependencies ++= Seq(
