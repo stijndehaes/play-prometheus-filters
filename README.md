@@ -1,6 +1,6 @@
 # Play prometheus filters
 
-[![Build Status](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters)
+[![Build Status](https://travis-ci.com/Jyllands-Posten/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters)
 [![Coverage Status](https://coveralls.io/repos/github/Jyllands-Posten/play-prometheus-filters/badge.svg?branch=master)](https://coveralls.io/github/Jyllands-Posten/play-prometheus-filters?branch=master)
 This play library provides four types of filters that collect prometheus metrics.
 
