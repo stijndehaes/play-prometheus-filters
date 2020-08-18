@@ -9,7 +9,7 @@ lazy val root = (project in file("."))
   .settings(
     publishTo := {
       val nexus = "https://oss.sonatype.org/"
-      if (version.value.trim.endsWith("SNAPSHOT"))
+      if (isSnapshot.value)
         Some("snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("releases" at nexus + "service/local/staging/deploy/maven2")
@@ -32,6 +32,7 @@ lazy val root = (project in file("."))
         <connection>scm:git:git@github.com:Jyllands-Posten/play-prometheus-filters.git</connection>
       </scm>
   )
+credentials += Credentials(Path.userHome / ".sbt" / ".credentials.sonatype")
 
 scalaVersion := "2.13.1"
 crossScalaVersions := Seq(scalaVersion.value, "2.12.12")
