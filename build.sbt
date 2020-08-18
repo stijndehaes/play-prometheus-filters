@@ -38,7 +38,7 @@ lazy val root = (project in file("."))
   )
 scalaVersion := "2.13.1"
 
-crossScalaVersions := Seq(scalaVersion.value, "2.12.8", "2.11.12")
+crossScalaVersions := Seq(scalaVersion.value, "2.12.8")
 
 val playVersion = "2.8.0"
 val prometheusClientVersion = "0.8.1"
