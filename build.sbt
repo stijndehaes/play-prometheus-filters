@@ -1,5 +1,5 @@
 name := "play-prometheus-filters"
-organization := "com.github.stijndehaes"
+organization := "dk.jyllands-posten"
 
 version := "0.6.0"
 
@@ -17,7 +17,7 @@ lazy val root = (project in file("."))
     pomIncludeRepository := { _ => false },
     makePomConfiguration ~= { _.withConfigurations(Vector(Compile, Runtime, Optional)) },
     pomExtra :=
-      <url>https://github.com/stijndehaes/play-prometheus-filters</url>
+      <url>https://github.com/Jyllands-Posten/play-prometheus-filters</url>
       <licenses>
         <license>
           <name>MIT License</name>
@@ -26,15 +26,9 @@ lazy val root = (project in file("."))
         </license>
       </licenses>
       <scm>
-        <url>git@github.com:stijndehaes/play-prometheus-filters.git</url>
-        <connection>scm:git:git@github.com:stijndehaes/play-prometheus-filters.git</connection>
+        <url>git@github.com:Jyllands-Posten/play-prometheus-filters.git</url>
+        <connection>scm:git:git@github.com:Jyllands-Posten/play-prometheus-filters.git</connection>
       </scm>
-      <developers>
-        <developer>
-          <id>stijndehaes</id>
-          <name>Stijn De Haes</name>
-        </developer>
-      </developers>
   )
 scalaVersion := "2.13.1"
 
