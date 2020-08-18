@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/Jyllands-Posten/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters)
 [![Coverage Status](https://coveralls.io/repos/github/Jyllands-Posten/play-prometheus-filters/badge.svg?branch=master)](https://coveralls.io/github/Jyllands-Posten/play-prometheus-filters?branch=master)
+
 This play library provides four types of filters that collect prometheus metrics.
 
 Two of these filters are also compatible with the [lagom framework](https://github.com/lagom/lagom).
@@ -182,3 +183,10 @@ Default these collectors are _not_ registered. This can be changed by setting th
 ```
 play-prometheus-filters.register-default-hotspot-collectors = true
 ```
+
+## Credits
+
+Special Thanks to [`@stijndehaes`](https://github.com/stijndehaes), whos work this project was forked from
+
+You can find the original project here [play-prometheus-filters](https://github.com/stijndehaes/play-prometheus-filters)
+
