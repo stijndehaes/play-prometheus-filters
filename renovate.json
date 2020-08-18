@@ -1,0 +1,29 @@
+{
+  "extends": [
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":ignoreUnstable",
+    ":prImmediately",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":noUnscheduledUpdates",
+    ":automergeDisabled",
+    ":ignoreModulesAndTests",
+    ":maintainLockFilesDisabled",
+    ":autodetectPinVersions",
+    ":prHourlyLimit1",
+    ":prConcurrentLimit10",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:disableTypesNodeMajor"
+  ],
+  "timezone": "Europe/Copenhagen",
+  "schedule": [
+      "after 7am before 9pm"
+  ],
+  "packageRules": [{
+    "packagePatterns": ["^com.amazonaws"],
+    "schedule": [
+      "after 7am before 9pm on the first day of the month"
+    ]
+  }]
+}
