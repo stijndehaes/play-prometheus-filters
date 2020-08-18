@@ -1,18 +1,18 @@
 # Play prometheus filters
 
-[![Build Status](https://travis-ci.org/stijndehaes/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/stijndehaes/play-prometheus-filters)
-[![Coverage Status](https://coveralls.io/repos/github/stijndehaes/play-prometheus-filters/badge.svg?branch=master)](https://coveralls.io/github/stijndehaes/play-prometheus-filters?branch=master)
+[![Build Status](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/Jyllands-Posten/play-prometheus-filters)
+[![Coverage Status](https://coveralls.io/repos/github/Jyllands-Posten/play-prometheus-filters/badge.svg?branch=master)](https://coveralls.io/github/Jyllands-Posten/play-prometheus-filters?branch=master)
 This play library provides four types of filters that collect prometheus metrics.
 
 Two of these filters are also compatible with the [lagom framework](https://github.com/lagom/lagom).
 
 A simple hello world application using these filters can be found in the following repo:
-https://github.com/stijndehaes/play-prometheus-filters-example-app
+https://github.com/Jyllands-Posten/play-prometheus-filters-example-app
 
 To use the library add the following to you build.sbt:
 
 ```scala
-libraryDependencies += "com.github.stijndehaes" %% "play-prometheus-filters" % "0.6.0"
+libraryDependencies += "dk.jyllands-posten" %% "play-prometheus-filters" % "0.6.0"
 
 ```
 This latest version supports Play 2.8.
@@ -87,8 +87,8 @@ You should make a filters class:
 ```scala
 import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
-import com.github.stijndehaes.playprometheusfilters.filters.LatencyFilter
-import com.github.stijndehaes.playprometheusfilters.filters.StatusCounterFilter
+import dk.jyllands-posten.playprometheusfilters.filters.LatencyFilter
+import dk.jyllands-posten.playprometheusfilters.filters.StatusCounterFilter
 
 class MyFilters @Inject() (
   latencyFilter: LatencyFilter,
@@ -168,7 +168,7 @@ play-prometheus-filters {
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 
 ```
-GET         /metrics          com.github.stijndehaes.playprometheusfilters.controllers.PrometheusController.getMetrics
+GET         /metrics          dk.jyllands-posten.playprometheusfilters.controllers.PrometheusController.getMetrics
 ```
 
 You should be able to immediately get the metrics
