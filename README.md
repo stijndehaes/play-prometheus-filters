@@ -12,7 +12,7 @@ https://github.com/Jyllands-Posten/play-prometheus-filters-example-app
 To use the library add the following to you build.sbt:
 
 ```scala
-libraryDependencies += "dk.jyllands-posten" %% "play-prometheus-filters" % "0.6.0"
+libraryDependencies += "dk.jyllandsposten" %% "play-prometheus-filters" % "0.6.0"
 
 ```
 This latest version supports Play 2.8.
@@ -87,8 +87,8 @@ You should make a filters class:
 ```scala
 import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
-import dk.jyllands-posten.playprometheusfilters.filters.LatencyFilter
-import dk.jyllands-posten.playprometheusfilters.filters.StatusCounterFilter
+import dk.jyllandsposten.playprometheusfilters.filters.LatencyFilter
+import dk.jyllandsposten.playprometheusfilters.filters.StatusCounterFilter
 
 class MyFilters @Inject() (
   latencyFilter: LatencyFilter,
@@ -168,7 +168,7 @@ play-prometheus-filters {
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 
 ```
-GET         /metrics          dk.jyllands-posten.playprometheusfilters.controllers.PrometheusController.getMetrics
+GET         /metrics          dk.jyllandsposten.playprometheusfilters.controllers.PrometheusController.getMetrics
 ```
 
 You should be able to immediately get the metrics

@@ -1,5 +1,5 @@
 name := "play-prometheus-filters"
-organization := "dk.jyllands-posten"
+organization := "dk.jyllandsposten"
 
 version := "0.6.0"
 
