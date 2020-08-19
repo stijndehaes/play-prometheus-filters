@@ -24,12 +24,9 @@ For more info on play version compatibility see the releases matrix.
 
 | Release     | Play version |
 | :---------- | :----------- |
-| 0.1.x       | 2.5.x        |
-| 0.2.x       | 2.5.x        |
-| 0.3.x       | 2.6.x        |
-| 0.4.x       | 2.6.x        |
-| 0.5.x       | 2.7.x        |
 | 0.6.x       | 2.8.x        |
+
+For earlier play versions, see the original repository [play-prometheus-filters](https://github.com/stijndehaes/play-prometheus-filters)
 
 ## The filters
 
