@@ -8,7 +8,7 @@ version := "0.6.1-SNAPSHOT"
 lazy val root = (project in file("."))
 
 // All publishing configuration resides in sonatype.sbt
-publishTo := sonatypePublishTo.value
+publishTo := sonatypePublishToBundle.value
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials.sonatype")
 
 scalaVersion := "2.13.1"
