@@ -11,7 +11,7 @@ lazy val root = (project in file("."))
 publishTo := sonatypePublishToBundle.value
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials.sonatype")
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.2"
 crossScalaVersions := Seq(scalaVersion.value, "2.12.12")
 
 val playVersion = "2.8.2"
@@ -28,6 +28,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatestplus.play"    %% "scalatestplus-play"         % "5.1.0"     % Test,
-  "org.mockito"               % "mockito-core"                % "3.2.4"    % Test
+  "org.scalatestplus.play"    %% "scalatestplus-play"         % "5.1.0"    % Test,
+  "org.scalatestplus"         %% "mockito-3-4"                % "3.2.1.0"  % Test,
+  "org.mockito"               %  "mockito-core"               % "3.4.6"    % Test
 )
