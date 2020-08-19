@@ -6,32 +6,9 @@ organization := "io.github.jyllands-posten"
 version := "0.6.1-SNAPSHOT"
 
 lazy val root = (project in file("."))
-  .settings(
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (isSnapshot.value)
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
-    publishMavenStyle := true,
-    publishArtifact in Test := false,
-    pomIncludeRepository := { _ => false },
-    makePomConfiguration ~= { _.withConfigurations(Vector(Compile, Runtime, Optional)) },
-    pomExtra :=
-      <url>https://github.com/Jyllands-Posten/play-prometheus-filters</url>
-      <licenses>
-        <license>
-          <name>MIT License</name>
-          <url>http://www.opensource.org/licenses/mit-license.php</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <scm>
-        <url>git@github.com:Jyllands-Posten/play-prometheus-filters.git</url>
-        <connection>scm:git:git@github.com:Jyllands-Posten/play-prometheus-filters.git</connection>
-      </scm>
-  )
+
+// All publishing configuration resides in sonatype.sbt
+publishTo := sonatypePublishTo.value
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials.sonatype")
 
 scalaVersion := "2.13.1"
