@@ -181,7 +181,7 @@ play-prometheus-filters.register-default-hotspot-collectors = true
 ```
 
 ## Releasing
-Remove SNAPSHOT in build.sbt
+Remove `-SNAPSHOT` in build.sbt
 
 ```git commit```
 
@@ -193,6 +193,8 @@ Tag the release ```git tag ${version}```
 Push the tag to remote ```git push origin ${version}```
 
 Release to sonatype ```sbt "+ publishSigned; sonatypeBundleRelease"```
+
+Bump version and add `-SNAPSHOT` in build.sbt
 
 ## Credits
 
