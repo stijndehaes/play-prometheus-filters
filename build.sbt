@@ -1,7 +1,7 @@
 name := "play-prometheus-filters"
 organization := "com.github.stijndehaes"
 
-version := "0.5.0"
+version := "0.6.0"
 
 lazy val root = (project in file("."))
   .settings(
@@ -36,16 +36,17 @@ lazy val root = (project in file("."))
         </developer>
       </developers>
   )
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.1"
 
-crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
+crossScalaVersions := Seq(scalaVersion.value, "2.12.8", "2.11.12")
 
-val playVersion = "2.7.1"
+val playVersion = "2.8.0"
+val prometheusClientVersion = "0.8.1"
 
 libraryDependencies ++= Seq(
-  "io.prometheus"             % "simpleclient"          % "0.6.0",
-  "io.prometheus"             % "simpleclient_hotspot"  % "0.6.0",
-  "io.prometheus"             % "simpleclient_servlet"  % "0.6.0",
+  "io.prometheus"             % "simpleclient"          % prometheusClientVersion,
+  "io.prometheus"             % "simpleclient_hotspot"  % prometheusClientVersion,
+  "io.prometheus"             % "simpleclient_servlet"  % prometheusClientVersion,
 
   // Play libs. Are provided not to enforce a specific version.
   "com.typesafe.play"         %% "play"                 % playVersion % Provided,
@@ -53,6 +54,6 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.scalatestplus.play"    %% "scalatestplus-play"         % "4.0.2"     % Test,
-  "org.mockito"               % "mockito-core"                % "2.16.0"    % Test
+  "org.scalatestplus.play"    %% "scalatestplus-play"         % "5.0.0"     % Test,
+  "org.mockito"               % "mockito-core"                % "3.2.4"    % Test
 )

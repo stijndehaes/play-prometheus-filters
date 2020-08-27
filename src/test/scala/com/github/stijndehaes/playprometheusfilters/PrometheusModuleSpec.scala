@@ -20,7 +20,7 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
         .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
-      val collectors = PrivateMethod[java.util.HashSet[Collector]]('collectors)
+      val collectors = PrivateMethod[java.util.HashSet[Collector]](Symbol("collectors"))
       (collector invokePrivate collectors()).size must be > 0
     }
 
@@ -31,7 +31,7 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
         .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
-      val collectors = PrivateMethod[java.util.HashSet[Collector]]('collectors)
+      val collectors = PrivateMethod[java.util.HashSet[Collector]](Symbol("collectors"))
       (collector invokePrivate collectors()).size must be (0)
     }
   }
@@ -43,7 +43,7 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
     /**
       * @return Registered exporter names.
       */
-    def getExporterNames: Seq[String] = {
+    def getExporterNames: collection.Seq[String] = {
       val exportNames = collection.mutable.Buffer.empty[String]
       val mfs = registry.metricFamilySamples()
       while(mfs.hasMoreElements) {
