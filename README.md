@@ -1,3 +1,8 @@
+# Archived project. No maintenance.
+
+Since I do not use the play framework myself anymore I have decided to stop my work on this project.
+You can find an active fork of this project here [https://github.com/Jyllands-Posten/play-prometheus-filters](https://github.com/Jyllands-Posten/play-prometheus-filters).
+
 # Play prometheus filters
 
 [![Build Status](https://travis-ci.org/stijndehaes/play-prometheus-filters.svg?branch=master)](https://travis-ci.org/stijndehaes/play-prometheus-filters)
