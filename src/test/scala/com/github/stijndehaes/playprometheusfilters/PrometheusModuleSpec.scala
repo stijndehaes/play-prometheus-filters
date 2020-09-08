@@ -1,6 +1,8 @@
 package com.github.stijndehaes.playprometheusfilters
 
-import com.github.stijndehaes.playprometheusfilters.PrometheusModule
+import java.util
+
+import com.github.stijndehaes.playprometheusfilters.helpers.PrivateMethodExposer
 import io.prometheus.client.{Collector, CollectorRegistry}
 import org.scalatest.{BeforeAndAfter, MustMatchers, PrivateMethodTester, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
@@ -21,8 +23,9 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
         .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
-      val collectors = PrivateMethod[java.util.HashSet[Collector]](Symbol("collectors"))
-      (collector invokePrivate collectors()).size must be > 0
+      PrivateMethodExposer(collector)(Symbol("collectors"))
+      val collectors: util.HashSet[Collector] = PrivateMethodExposer(collector)(Symbol("collectors"))().asInstanceOf[java.util.HashSet[Collector]]//PrivateMethod[java.util.HashSet[Collector]](Symbol(collectors))
+      collectors.size must be > 0
     }
 
     "not register default exporters when disabled" in {
@@ -32,8 +35,8 @@ class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfte
         .build()
 
       val collector = app.injector.instanceOf[CollectorRegistry]
-      val collectors = PrivateMethod[java.util.HashSet[Collector]](Symbol("collectors"))
-      (collector invokePrivate collectors()).size must be (0)
+      val collectors: util.HashSet[Collector] = PrivateMethodExposer(collector)(Symbol("collectors"))().asInstanceOf[java.util.HashSet[Collector]]//PrivateMethod[java.util.HashSet[Collector]](Symbol(collectors))
+      collectors.size must be (0)
     }
   }
 

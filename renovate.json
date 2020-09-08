@@ -16,14 +16,5 @@
     "group:recommended",
     "helpers:disableTypesNodeMajor"
   ],
-  "timezone": "Europe/Copenhagen",
-  "schedule": [
-      "after 7am before 9pm"
-  ],
-  "packageRules": [{
-    "packagePatterns": ["^com.amazonaws"],
-    "schedule": [
-      "after 7am before 9pm on the first day of the month"
-    ]
-  }]
+  "timezone": "Europe/Copenhagen"
 }
