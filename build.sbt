@@ -21,11 +21,11 @@ libraryDependencies ++= Seq(
   "io.prometheus" % "simpleclient" % prometheusClientVersion,
   "io.prometheus" % "simpleclient_hotspot" % prometheusClientVersion,
   "io.prometheus" % "simpleclient_servlet" % prometheusClientVersion,
-  //
+
   // Play libs. Are provided not to enforce a specific version.
   "com.typesafe.play" %% "play" % playVersion % Provided,
   "com.typesafe.play" %% "play-guice" % playVersion % Provided,
-  //
+
   // This library makes some Scala 2.13 APIs available on Scala 2.11 and 2.12.
   "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
 )
