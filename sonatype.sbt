@@ -9,3 +9,8 @@ scmInfo := Some(
     "scm:git:git@github.com:Jyllands-Posten/play-prometheus-filters.git"
   )
 )
+
+developers := List(
+    Developer(id="SoerenSilkjaer", name="Søren Valentin Silkjær", email="soren.hansen@jp.dk", url=url("https://github.com/SoerenSilkjaer")),
+  Developer(id="renevangsgaardjp", name="René Vangsgaard", email="rene.vangsgaard@jp.dk", url=url("https://github.com/renevangsgaardjp"))
+)
