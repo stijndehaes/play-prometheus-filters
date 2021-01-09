@@ -13,7 +13,7 @@ https://github.com/Jyllands-Posten/play-prometheus-filters-example-app
 To use the library add the following to you build.sbt:
 
 ```scala
-libraryDependencies += "io.github.stijndehaes" %% "play-prometheus-filters" % "0.6.0"
+libraryDependencies += "io.github.jyllands-posten" %% "play-prometheus-filters" % "0.6.1"
 
 ```
 This latest version supports Play 2.8.
@@ -165,7 +165,7 @@ play-prometheus-filters {
 The project also provides a prometheus controller with a get metric method. If you add the following to your routes file:
 
 ```
-GET         /metrics          io.github.stijndehaes.playprometheusfilters.controllers.PrometheusController.getMetrics
+GET         /metrics          com.github.stijndehaes.playprometheusfilters.controllers.PrometheusController.getMetrics
 ```
 
 You should be able to immediately get the metrics
