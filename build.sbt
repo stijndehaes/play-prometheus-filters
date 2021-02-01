@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-guice" % playVersion % Provided,
 
   // This library makes some Scala 2.13 APIs available on Scala 2.11 and 2.12.
-  "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
+  "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.1"
 )
 
 libraryDependencies ++= Seq(
