@@ -27,11 +27,11 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-guice" % playVersion % Provided,
 
   // This library makes some Scala 2.13 APIs available on Scala 2.11 and 2.12.
-  "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.6"
+  "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.1"
 )
 
 libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.scalatestplus" %% "mockito-3-4" % "3.2.3.0" % Test,
-  "org.mockito" % "mockito-core" % "3.4.6" % Test
+  "org.mockito" % "mockito-core" % "3.7.7" % Test
 )
