@@ -1,14 +1,15 @@
 package com.github.stijndehaes.playprometheusfilters
 
 import java.util
-
 import com.github.stijndehaes.playprometheusfilters.helpers.PrivateMethodExposer
 import io.prometheus.client.{Collector, CollectorRegistry}
-import org.scalatest.{BeforeAndAfter, MustMatchers, PrivateMethodTester, WordSpec}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.{BeforeAndAfter, PrivateMethodTester}
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class PrometheusModuleSpec extends WordSpec with MustMatchers with BeforeAndAfter with PrivateMethodTester with GuiceOneAppPerTest {
+class PrometheusModuleSpec extends AnyWordSpec with Matchers with BeforeAndAfter with PrivateMethodTester with GuiceOneAppPerTest {
 
   before {
     // clearing registry before each test

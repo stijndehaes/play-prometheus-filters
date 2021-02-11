@@ -6,8 +6,9 @@ import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{MustMatchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.libs.typedmap.TypedMap
@@ -18,7 +19,7 @@ import play.api.test.{DefaultAwaitTimeout, FakeRequest, FutureAwaits}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class StatusAndRouteLatencyFilterSpec extends WordSpec with MustMatchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
+class StatusAndRouteLatencyFilterSpec extends AnyWordSpec with Matchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
 
   private implicit val mat = app.materializer
   private val configuration = mock[Configuration]
