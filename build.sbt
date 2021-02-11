@@ -14,7 +14,7 @@ credentials += Credentials(Path.userHome / ".sbt" / ".credentials.sonatype")
 scalaVersion := "2.13.4"
 crossScalaVersions := Seq(scalaVersion.value, "2.12.12")
 
-val playVersion = "2.8.2"
+val playVersion = "2.8.7"
 val prometheusClientVersion = "0.9.0"
 
 libraryDependencies ++= Seq(
