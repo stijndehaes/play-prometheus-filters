@@ -17,18 +17,6 @@ class PrometheusModuleSpec extends AnyWordSpec with Matchers with BeforeAndAfter
   }
 
   "PrometheusModule" should {
-    "register default exporters when enabled" in {
-      // default enabled
-      val app = new GuiceApplicationBuilder()
-        .configure(PrometheusModule.defaultExportsKey -> true)
-        .build()
-
-      val collector = app.injector.instanceOf[CollectorRegistry]
-      PrivateMethodExposer(collector)(Symbol("collectors"))
-      val collectors: util.HashSet[Collector] = PrivateMethodExposer(collector)(Symbol("collectors"))().asInstanceOf[java.util.HashSet[Collector]]//PrivateMethod[java.util.HashSet[Collector]](Symbol(collectors))
-      collectors.size must be > 0
-    }
-
     "not register default exporters when disabled" in {
       // disable default exporters
       val app = new GuiceApplicationBuilder()
