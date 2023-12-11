@@ -1,12 +1,13 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import akka.stream.Materializer
 import com.github.stijndehaes.playprometheusfilters.metrics.{CounterRequestMetrics, LatencyRequestMetrics, RequestMetric, RequestMetricBuilder}
 import io.prometheus.client.Collector
+import org.apache.pekko.stream.Materializer
 import play.api.Configuration
 import play.api.mvc.{Filter, RequestHeader, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.jdk.CollectionConverters._
 
 /**
   * Generic filter implementation to add metrics for a request.
@@ -37,7 +38,6 @@ abstract class MetricsFilter(configuration: Configuration)(implicit val mat: Mat
   val metrics: List[RequestMetric[_, RequestHeader, Result]]
 
   val excludePaths = {
-    import collection.JavaConverters._
     Option(configuration.underlying)
       .map(_.getStringList("play-prometheus-filters.exclude.paths"))
       .map(_.asScala.toSet)

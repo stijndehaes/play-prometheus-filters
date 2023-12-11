@@ -2,6 +2,7 @@ package com.github.stijndehaes.playprometheusfilters.filters
 
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
+import org.apache.pekko.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.scalatest.matchers.must.Matchers
@@ -17,7 +18,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class StatusCounterFilterSpec extends AnyWordSpec with Matchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite {
 
-  private implicit val mat = app.materializer
+  private implicit val mat: Materializer = app.materializer
   private val configuration = mock[Configuration]
 
   "Filter constructor" should {
@@ -36,7 +37,7 @@ class StatusCounterFilterSpec extends AnyWordSpec with Matchers with MockitoSuga
 
       await(filter(action)(rh).run())
 
-      val metrics = filter.metrics(0).metric.collect()
+      val metrics = filter.metrics.head.metric.collect()
       metrics must have size 1
       val samples = metrics.get(0).samples
       samples.get(0).value mustBe 1.0

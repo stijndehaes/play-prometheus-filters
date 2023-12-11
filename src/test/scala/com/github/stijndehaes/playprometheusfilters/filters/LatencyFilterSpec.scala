@@ -1,8 +1,9 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import com.github.stijndehaes.playprometheusfilters.filters.LatencyFilter
+import org.apache.pekko.stream.Materializer
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
+import org.apache.pekko.actor.ActorSystem
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
@@ -17,11 +18,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class LatencyFilterSpec extends PlaySpec with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite {
 
-  val configuration = mock[Configuration]
+  private implicit val actorSystem: ActorSystem = ActorSystem("test")
+
+  private val configuration: Configuration = mock[Configuration]
 
   "Filter constructor" should {
     "Add a histogram to the prometheus registry" in {
-      implicit val mat = app.materializer
       val collectorRegistry = mock[CollectorRegistry]
       new LatencyFilter(collectorRegistry, configuration)
       verify(collectorRegistry).register(any())
@@ -30,7 +32,7 @@ class LatencyFilterSpec extends PlaySpec with MockitoSugar with Results with Def
 
   "Apply method" should {
     "Measure the latency" in {
-      implicit val mat = app.materializer
+      implicit val mat: Materializer = app.materializer
       val filter = new LatencyFilter(mock[CollectorRegistry], configuration)
       val rh = FakeRequest()
       val action = new MockController(stubControllerComponents()).ok

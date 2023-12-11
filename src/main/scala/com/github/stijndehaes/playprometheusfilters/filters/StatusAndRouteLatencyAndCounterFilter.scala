@@ -1,15 +1,13 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import akka.stream.Materializer
 import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.CounterRequestMetricBuilder
 import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics.LatencyRequestMetricsBuilder
-import com.github.stijndehaes.playprometheusfilters.metrics.CounterRequestMetrics.CounterRequestMetricBuilder
-import com.github.stijndehaes.playprometheusfilters.metrics.LatencyRequestMetrics.LatencyRequestMetricsBuilder
 import io.prometheus.client._
-import javax.inject.{Inject, Singleton}
+import org.apache.pekko.stream.Materializer
 import play.api.Configuration
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 /**

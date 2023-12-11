@@ -1,9 +1,10 @@
 package com.github.stijndehaes.playprometheusfilters.filters
 
-import com.github.stijndehaes.playprometheusfilters.filters.StatusAndRouteLatencyFilter
 import com.github.stijndehaes.playprometheusfilters.metrics.DefaultPlayUnmatchedDefaults
 import com.github.stijndehaes.playprometheusfilters.mocks.MockController
 import io.prometheus.client.CollectorRegistry
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Materializer
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.verify
 import org.scalatest.matchers.must.Matchers
@@ -21,7 +22,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class StatusAndRouteLatencyFilterSpec extends AnyWordSpec with Matchers with MockitoSugar with Results with DefaultAwaitTimeout with FutureAwaits with GuiceOneAppPerSuite  {
 
-  private implicit val mat = app.materializer
+  private implicit val mat: Materializer = app.materializer
   private val configuration = mock[Configuration]
 
   "Filter constructor" should {

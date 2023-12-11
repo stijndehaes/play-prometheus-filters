@@ -1,6 +1,6 @@
 package com.github.stijndehaes.playprometheusfilters.controllers
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import com.github.stijndehaes.playprometheusfilters.utils.WriterAdapter
 import javax.inject._
 import play.api.mvc._
